@@ -1,0 +1,44 @@
+input {
+    padding: 0.4rem;
+    width: 16rem;
+    margin: auto;
+}
+label {
+    margin: auto;
+    margin-top: 3rem;
+    padding: 0.2rem;
+}
+
+button {
+    width: 10rem;
+    background-color: white;
+    box-shadow: var(--mpd-shadow-blue) 1px 1px 5px 3px;
+    font-size: large;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 3px;
+    margin: auto;
+    margin-top: 2rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--mpd-shadow-blue);
+}
+h2 {
+    text-align: center;
+}
+
+.register-div {
+    width: 100%;
+    text-align: center;
+    padding-top: 1rem;
+}
+
+select {
+    width: 16rem;
+    margin: auto;
+    padding: 0.4rem;
+    border: 2px solid grey;
+    border-radius: 10px;
+}

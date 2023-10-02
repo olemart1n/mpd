@@ -1,0 +1,9 @@
+a {
+    text-decoration: none;
+}
+header {
+    display: flex;
+    padding: 1rem;
+    justify-content: space-around;
+    align-items: center;
+}
