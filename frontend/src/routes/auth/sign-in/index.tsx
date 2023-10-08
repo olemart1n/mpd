@@ -5,7 +5,7 @@ import styles from "../index.css?inline";
 import { appContext } from "~/context/appState";
 import { useContext } from "@builder.io/qwik";
 import { StatusMessage, type ApiMessage } from "~/components/ui/statusMessage";
-import SpServerClass from "~/supabase/spClient";
+import SpServerClass from "~/supabase/spServer";
 import { type User } from "supabase-auth-helpers-qwik";
 
 export const useSupabaseLogin = routeAction$(async (form, reqEv) => {

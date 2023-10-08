@@ -1,6 +1,7 @@
 import { component$, useStylesScoped$, useContext, useSignal, $ } from "@builder.io/qwik";
 import styles from "./index.css?inline";
 // import { ButtonLogin } from "./ButtonLogin";
+import { ButtonSignOut } from "./ButtonSignOut";
 import { NavIcon } from "./NavIcon";
 import { appContext } from "~/context/appState";
 import { useNavigate } from "@builder.io/qwik-city";
@@ -22,11 +23,11 @@ export const Nav = component$(() => {
                 {app.user ? (
                     <ul>
                         <li>
-                            <button onClick$={() => navigate("/auth/sign-in")}>Bruker</button>
+                            <button onClick$={() => navigate("/user")}>Bruker</button>
                         </li>
 
                         <li>
-                            <button onClick$={() => navigate("/auth/sign-up")}>Logg ut</button>
+                            <ButtonSignOut />
                         </li>
                     </ul>
                 ) : (

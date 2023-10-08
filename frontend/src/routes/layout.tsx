@@ -6,10 +6,11 @@ import {
     useVisibleTask$,
     useContext,
 } from "@builder.io/qwik";
-import type { RequestHandler } from "@builder.io/qwik-city";
+import { type RequestHandler } from "@builder.io/qwik-city";
 import { Nav } from "~/components/nav";
 import { Footer } from "~/components/footer";
 import { appContext, type App } from "~/context/appState";
+
 export default component$(() => {
     const appState: App = useStore({ navIconLoading: false, user: null });
     useContextProvider(appContext, appState);

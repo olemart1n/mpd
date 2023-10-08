@@ -2,7 +2,7 @@ import { createServerClient, type SupabaseClient } from "supabase-auth-helpers-q
 import { type RequestEvent, type RequestEventAction } from "@builder.io/qwik-city";
 import { type SignInWithPasswordCredentials } from "@supabase/supabase-js";
 
-class SpServerClass {
+class SpServer {
     supabase: SupabaseClient;
     constructor(reqEv: RequestEvent | RequestEventAction) {
         this.supabase = createServerClient(
@@ -53,4 +53,4 @@ class SpServerClass {
     }
 }
 
-export default SpServerClass;
+export default SpServer;
