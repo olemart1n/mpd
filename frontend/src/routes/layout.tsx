@@ -1,17 +1,40 @@
-import { component$, Slot } from "@builder.io/qwik";
+import {
+    component$,
+    Slot,
+    useContextProvider,
+    useStore,
+    useVisibleTask$,
+    useContext,
+} from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
+import { Nav } from "~/components/nav";
+import { Footer } from "~/components/footer";
+import { appContext, type App } from "~/context/appState";
+export default component$(() => {
+    const appState: App = useStore({ navIconLoading: false, user: null });
+    useContextProvider(appContext, appState);
+    const app = useContext(appContext);
+    useVisibleTask$(() => {
+        if (localStorage.getItem("user") && !app.user) {
+            app.user = JSON.parse(localStorage.getItem("user") as string);
+        }
+    });
+    return (
+        <>
+            <header>
+                <Nav />
+            </header>
+            <main>
+                <Slot />
+            </main>
+            <Footer />
+        </>
+    );
+});
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
-  // Control caching for this request for best performance and to reduce hosting costs:
-  // https://qwik.builder.io/docs/caching/
-  cacheControl({
-    // Always serve a cached response by default, up to a week stale
-    staleWhileRevalidate: 60 * 60 * 24 * 7,
-    // Max once every 5 seconds, revalidate on the server to get a fresh version of this page
-    maxAge: 5,
-  });
+    cacheControl({
+        staleWhileRevalidate: 60 * 60 * 24 * 7,
+        maxAge: 5,
+    });
 };
-
-export default component$(() => {
-  return <Slot />;
-});

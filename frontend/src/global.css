@@ -1,4 +1,5 @@
-
+@import url("https://fonts.googleapis.com/css2?family=Mandali&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Mandali&display=swap");
 
 /**
  * WHAT IS THIS FILE?
@@ -7,29 +8,78 @@
  * the styles in here will be applied to the Document, without any sort of CSS scoping.
  *
  */
+
+:root {
+    --dark: #151934;
+    --turk: #add3cf;
+    --success: #aeecc4;
+    --error: #f68f82;
+    --white: rgb(255, 255, 255);
+    --green: #99c8ce;
+    --green-light: #deeeef;
+    --blue: #183c5c;
+    --blue-light: #2e72ac;
+
+    --shadow-blue: rgba(117, 151, 165, 0.3);
+    --shadow-black: rgba(47, 58, 62, 0.3);
+    --shadow-white: rgba(218, 235, 241, 0.3);
+
+    --font-xsm: 0.4rem;
+    --font-sm: 0.8rem;
+    --font-md: 1.1rem;
+    --font-md-plus: 1.5rem;
+    --font-lg: 1.8rem;
+    --font-xlg: 3rem;
+
+    --media-sm: 480px;
+    --media-md: 760px;
+    --media-lg: 1020px;
+}
 html {
-  -webkit-text-size-adjust: 100%;
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    "Noto Sans",
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji";
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    font-family:
+        "Inter",
+        Roboto,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Helvetica Neue",
+        Arial,
+        "Noto Sans",
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji";
+}
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+}
+body {
+    padding: 0;
+    margin: 0;
+    line-height: inherit;
+    display: grid;
+    height: 100dvh;
+    grid-template-rows: 10% 1fr auto;
 }
 
-body {
-  padding: 0;
-  line-height: inherit;
+header {
+    background-color: var(--green-light);
+    color: var(--dark);
+}
+main {
+    color: var(--dark);
+}
+footer {
+    color: var(--white);
+    background-color: var(--dark);
 }

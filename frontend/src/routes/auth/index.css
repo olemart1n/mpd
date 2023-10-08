@@ -1,0 +1,72 @@
+input {
+    padding: 0.4rem;
+    font-size: var(--font-mg);
+    width: 18rem;
+    margin: auto;
+}
+label {
+    font-size: var(--font-md-plus);
+    margin: auto;
+    margin-top: 2rem;
+    padding: 0.2rem;
+}
+section {
+    min-height: 40%;
+    border: 1px solid var(--blue);
+    flex-direction: column;
+    display: flex;
+    padding: 1rem 0;
+    margin: 2rem auto;
+    min-width: 22rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-black) 2px 2px 10px 2px;
+}
+
+button {
+    width: 10rem;
+    background-color: var(--blue);
+    box-shadow: var(--mpd-shadow-blue) 1px 1px 5px 3px;
+    font-size: large;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 3px;
+    margin: auto;
+    margin-top: 2rem;
+    cursor: pointer;
+    color: white;
+}
+button:checked {
+    background-color: var(--blue-light);
+}
+button:active {
+    background-color: var(--blue-light);
+}
+button:focus {
+    background-color: var(--blue-light);
+}
+button:visited {
+    background-color: var(--blue-light);
+}
+
+h2 {
+    text-align: center;
+    margin: 1rem auto;
+}
+
+.register-div {
+    width: 100%;
+    text-align: center;
+    padding-top: 1rem;
+    font-size: var(--font-md);
+}
+
+select {
+    width: 16rem;
+    margin: auto;
+    padding: 0.4rem;
+    border: 2px solid grey;
+    border-radius: 10px;
+}
+.register-message {
+    margin: auto;
+}
