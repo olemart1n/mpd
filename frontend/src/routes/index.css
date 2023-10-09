@@ -1,0 +1,8 @@
+button {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    background-color: var(--blue);
+    color: var(--white);
+    font-size: var(--font-md-plus);
+}

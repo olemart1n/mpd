@@ -1,0 +1,57 @@
+input {
+    font-size: var(--font-md-plus);
+    color: var(--dark);
+}
+
+select {
+    font-size: var(--font-md);
+}
+
+.form-div {
+    width: 16rem;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-div.number-of-attendees {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.form-div.date {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.form-div.date input {
+    font-size: var(--font-md);
+}
+.form-div.clock {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.form-div.clock input {
+    font-size: var(--font-md);
+}
+.form-div.category {
+    justify-content: space-around;
+    align-items: center;
+}
+.form-div.category select {
+    font-size: var(--font-md);
+    color: var(--dark);
+}
+.textarea-div {
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    width: 100%;
+    background-color: var(--green);
+    border: none;
+    padding: 0.5rem;
+    font-size: var(--font-md-plus);
+}

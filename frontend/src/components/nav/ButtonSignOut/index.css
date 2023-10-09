@@ -1,0 +1,11 @@
+button {
+    color: var(--white);
+    border: 2px solid var(--white);
+    background-color: var(--white);
+    border-radius: 3px;
+    padding: 0.2rem 0.5rem;
+    font-size: var(--font-md);
+    color: var(--dark);
+    width: max-content;
+    margin: 1rem 2rem;
+}
