@@ -1,20 +1,28 @@
-import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
-import SpBrowser from "~/supabase/spBrowser";
-import { createBrowserClient } from "supabase-auth-helpers-qwik";
+import { type Signal, component$ } from "@builder.io/qwik";
+import { server$, useNavigate } from "@builder.io/qwik-city";
+import SpServer from "~/supabase/spServer";
+import type { RequestEvent } from "@builder.io/qwik-city";
 
-export const ButtonSignOut = component$(() => {
-    const btn = useSignal<HTMLButtonElement>();
-    useVisibleTask$(() => {
-        const signOut = async () => {
-            const sp = createBrowserClient("345", "3453453");
-            // const { error } = await sp.auth.signOut();
-            // error && console.log(error);
-            // localStorage.clear();
-            // document.location.replace("/");
-        };
-        btn.value?.addEventListener("click", () => {
-            signOut();
-        });
-    });
-    return <button ref={btn}>Logg ut</button>;
+const signOut = server$(async function () {
+    const sp = new SpServer(this as RequestEvent);
+    const error = await sp.log_out();
+
+    console.log(error);
+    return error;
+});
+
+export const ButtonSignOut = component$(({ value }: Signal) => {
+    const nav = useNavigate();
+    return (
+        <button
+            onClick$={() => {
+                signOut();
+                localStorage.clear();
+                nav("/");
+                value.value = !value.value;
+            }}
+        >
+            Logg ut
+        </button>
+    );
 });

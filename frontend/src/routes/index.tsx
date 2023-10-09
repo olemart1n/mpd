@@ -1,10 +1,10 @@
 import { component$ } from "@builder.io/qwik";
 import { routeAction$, Form, type DocumentHead } from "@builder.io/qwik-city";
-import { PostInitiative } from "~/components/forms/postInitiative";
+// import { PostInitiative } from "~/components/forms/postInitiative";
 export const useSpPostFile = routeAction$(() => {});
 
 export default component$(() => {
-    const action = useSpPostFile();
+    // const action = useSpPostFile();
     return (
         <>
             <h1>Hi 👋</h1>

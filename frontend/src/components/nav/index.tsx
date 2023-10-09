@@ -27,7 +27,7 @@ export const Nav = component$(() => {
                         </li>
 
                         <li>
-                            <ButtonSignOut />
+                            <ButtonSignOut value={navIsToggled} />
                         </li>
                     </ul>
                 ) : (
