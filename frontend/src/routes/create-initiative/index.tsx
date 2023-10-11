@@ -15,9 +15,8 @@ import type { ApiMessage } from "~/components/ui/statusMessage";
 import { StatusMessage } from "~/components/ui/statusMessage";
 export const useSpCreateInsj = routeAction$(async (form, reqEv) => {
     const sp = new SpServer(reqEv);
-    const { data, error } = await sp.post("insjes", form);
+    const { data, error } = await sp.post("initiatives", form);
     console.log("error " + error?.message);
-    console.log("error " + error?.hint);
     console.log("data " + data);
     return { data, error };
 });
@@ -64,7 +63,21 @@ export default component$(() => {
     });
     return (
         <Form preventdefault:submit action={action}>
-            <input type="text" name="user_id" id="user_id" hidden value={app.user?.id} />
+            <input type="text" name="author_id" id="author_id" hidden value={app.user?.id} />
+            <input
+                type="text"
+                name="author_name"
+                id="author_name"
+                hidden
+                value={app.user?.user_metadata.first_name}
+            />
+            <input
+                type="text"
+                name="author_name"
+                id="author_name"
+                hidden
+                value={app.user?.user_metadata.first_name}
+            />
             <div class="form-div">
                 <label for="title">Tittel</label>
                 <input
@@ -77,8 +90,8 @@ export default component$(() => {
                 />
             </div>
             <div class="number-of-attendees form-div">
-                <label for="max_attendees">Antall</label>
-                <select name="max_attendees" id="max_attendees" required>
+                <label for="allowed_attendees">Antall</label>
+                <select name="allowed_attendees" id="allowed_attendees" required>
                     <option value="not-specified">Ikke viktig</option>
                     {numbersArray.map((num, i) => (
                         <option key={num} value={i}>
@@ -102,8 +115,8 @@ export default component$(() => {
                 <label for="clock">Klokka</label>
                 <input
                     type="time"
-                    name="clock"
-                    id="clock"
+                    name="time"
+                    id="time"
                     required
                     value={currentTime.value}
                     onChange$={handleTimeChange}

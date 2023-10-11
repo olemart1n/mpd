@@ -16,10 +16,6 @@ class SpServer {
         const { error, data } = await this.supabase.auth.signInWithPassword(credentials);
         return { error: error, data: data };
     }
-    async sign_up(credentials: SignInWithPasswordCredentials) {
-        const { error, data } = await this.supabase.auth.signUp(credentials);
-        return { error: error, data: data };
-    }
 
     async log_out() {
         const { error } = await this.supabase.auth.signOut();
@@ -47,8 +43,12 @@ class SpServer {
             .order("created_at", { ascending: false });
         return { data, error };
     }
-    async get_by_id(id: string, table: string) {
-        const { data, error } = await this.supabase.from(table).select(id);
+    async get_by_id(table: string, id: string) {
+        const { data, error } = await this.supabase.from(table).select("*").eq("id", id);
+        return { data, error };
+    }
+    async show_interest(table: string, values: [] | {}) {
+        const { data, error } = await this.supabase.from(table).insert(values).select();
         return { data, error };
     }
 }

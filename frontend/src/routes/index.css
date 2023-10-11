@@ -6,3 +6,15 @@ button {
     color: var(--white);
     font-size: var(--font-md-plus);
 }
+
+button:disabled {
+    background-color: lightgrey;
+    color: var(--dark);
+    font-size: var(--font-md);
+}
+
+section {
+    display: grid;
+    width: 100%;
+    grid-template-columns: auto auto;
+}

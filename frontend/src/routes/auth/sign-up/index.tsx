@@ -19,7 +19,7 @@ export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
     };
     const sp = createServerClient(
         import.meta.env.PUBLIC_SUPABASE_URL,
-        import.meta.env.PUBLIC_SUPABASE_API_KEY,
+        import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
         reqEv
     );
     const { data, error } = await sp.auth.signUp({
@@ -39,7 +39,7 @@ export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
     console.log(data, error);
     const id = data.user?.id;
     if (id) {
-        messageToClient.message = "Vent litt";
+        messageToClient.message = "tar deg til innloggings siden";
         messageToClient.status = "success";
     }
     error?.message ? (messageToClient.message = error.message.toString()) : "error";
@@ -65,7 +65,7 @@ export default component$(() => {
         statusMessage.message = action.value.message;
         statusMessage.status = action.value.status;
         setTimeout(() => {
-            nav("/");
+            nav("/auth/sign-in");
         }, 500);
     });
     return (
@@ -75,7 +75,7 @@ export default component$(() => {
             preventdefault:submit
         >
             <section>
-                <label for="first_name">Hva heter du?</label>
+                <label for="first_name">Navn</label>
                 <input type="text" name="first_name" id="first_name" autoComplete="name" />
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" required autoComplete="email" />
