@@ -8,6 +8,7 @@ interface CardType {
     category: string | undefined;
     author_id: string | undefined;
     author_name: string | null;
+    interested_count: string | null;
 }
 
 type CardInfo = {
@@ -31,6 +32,8 @@ export const Card = component$(({ values }: CardInfo) => {
                 <h5>{values.author_name}</h5>
                 <p>{values.title}</p>
                 <p>{values.category}</p>
+
+                <p class="count">{values.interested_count}</p>
             </Link>
         </div>
     );

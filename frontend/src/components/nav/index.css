@@ -6,20 +6,15 @@ nav {
     overflow: hidden;
 }
 
-a {
-    color: var(--text-dark);
-    text-decoration: none;
-    width: max-content;
-}
-
-nav a h1 {
-    font-size: var(--font-lg);
-    color: var(--dark);
-}
 .toggle-button-div {
     position: absolute;
+    min-width: 0.5rem;
+    min-height: 0.5rem;
     right: 1rem;
     top: 1rem;
+}
+section {
+    z-index: 10;
 }
 
 section ul {
@@ -45,8 +40,9 @@ section ul button {
         width: 12rem;
         font-size: var(--font-lg);
         flex-direction: column;
-        background-color: rgba(0, 0, 0, 0.8);
-        top: 10%;
+        background-color: var(--blue);
+        opacity: 0.95;
+        top: 15%;
         right: -12rem;
         transition: right 0.2s ease-in;
     }

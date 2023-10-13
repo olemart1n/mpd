@@ -16,8 +16,6 @@ import { StatusMessage } from "~/components/ui/statusMessage";
 export const useSpCreateInsj = routeAction$(async (form, reqEv) => {
     const sp = new SpServer(reqEv);
     const { data, error } = await sp.post("initiatives", form);
-    console.log("error " + error?.message);
-    console.log("data " + data);
     return { data, error };
 });
 
@@ -55,7 +53,7 @@ export default component$(() => {
             statusMessage.message = "Du har postet en insj";
             setTimeout(() => {
                 nav("/");
-            }, 700);
+            }, 1200);
         } else {
             statusMessage.status = "error";
             statusMessage.message = "Et problem oppsto, prøv igjen senere";

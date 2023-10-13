@@ -1,7 +1,0 @@
-div {
-    width: 10rem;
-    font-size: var(--font-md);
-    padding: 0.3rem;
-    border-radius: 1rem;
-    box-shadow: var(--shadow-blue) 2px 2px 10px 5px;
-}

@@ -47,9 +47,49 @@ class SpServer {
         const { data, error } = await this.supabase.from(table).select("*").eq("id", id);
         return { data, error };
     }
-    async show_interest(table: string, values: [] | {}) {
+    async add_interest(table: string, values: [] | {}) {
         const { data, error } = await this.supabase.from(table).insert(values).select();
         return { data, error };
+    }
+    async get_all_interested(id: string | {}) {
+        const { data, error } = await this.supabase
+            .from("interested")
+            .select("*")
+            .eq("initiative_id", id)
+            .order("created_at", { ascending: false });
+        return { data, error };
+    }
+    channel_initiatives() {
+        const channel = this.supabase
+            .channel("initiatives_channel")
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "initiatives" },
+                (event) => {
+                    console.log(event);
+                }
+            )
+            .subscribe();
+        return channel;
+    }
+    channel_interested(id: string | {}) {
+        function hasInitiativeId(newInterest: any): newInterest is { initiative_id: number } {
+            return "initiative_id" in newInterest;
+        }
+        const channel = this.supabase
+            .channel("interested_channel")
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "interested" },
+                (event) => {
+                    const { new: newInterest } = event;
+
+                    if (hasInitiativeId(newInterest) === id) return newInterest;
+                    // if (newInterest.initiative_id === id) return newInterest;
+                }
+            )
+            .subscribe();
+        return channel;
     }
 }
 
