@@ -1,6 +1,6 @@
 import { type DocumentHead } from "@builder.io/qwik-city";
 import { component$, useStylesScoped$, useStore, useVisibleTask$ } from "@builder.io/qwik";
-import { Form, routeAction$, Link, useNavigate } from "@builder.io/qwik-city";
+import { Form, routeAction$, useNavigate } from "@builder.io/qwik-city";
 import styles from "../index.css?inline";
 import { appContext } from "~/context/appState";
 import { useContext } from "@builder.io/qwik";
@@ -8,7 +8,8 @@ import { StatusMessage, type ApiMessage } from "~/components/ui/statusMessage";
 import { createServerClient } from "supabase-auth-helpers-qwik";
 
 export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
-    const { email, password, first_name, gender } = form;
+    console.log(form);
+    const { email, password, username, passwordControl, gender, age } = form;
     type MessageToClient = {
         message: string;
         status: string;
@@ -17,6 +18,11 @@ export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
         message: "",
         status: "error",
     };
+    if (password !== passwordControl) {
+        messageToClient.message = "passord matcher ikke";
+        messageToClient.status = "error";
+        return messageToClient;
+    }
     const sp = createServerClient(
         import.meta.env.PUBLIC_SUPABASE_URL,
         import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
@@ -27,19 +33,16 @@ export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
         password: password.toString(),
         options: {
             data: {
-                first_name,
+                username,
                 gender,
-                user_image: `${
-                    import.meta.env.PUBLIC_SUPABASE_URL
-                }/storage/v1/object/public/avatar/`,
-                initiatives: [],
+                age,
             },
         },
     });
     console.log(data, error);
     const id = data.user?.id;
     if (id) {
-        messageToClient.message = "tar deg til innloggings siden";
+        messageToClient.message = "Velkommen😀 Logg inn i neste steg";
         messageToClient.status = "success";
     }
     error?.message ? (messageToClient.message = error.message.toString()) : "error";
@@ -66,8 +69,13 @@ export default component$(() => {
         statusMessage.status = action.value.status;
         setTimeout(() => {
             nav("/auth/sign-in");
-        }, 500);
+        }, 1500);
     });
+    const ageArray = [];
+    for (let i = 0; i < 100; i++) {
+        ageArray.push(i);
+    }
+    console.log(ageArray);
     return (
         <Form
             style={{ display: "flex", flexDirection: "column", height: "100%" }}
@@ -75,27 +83,59 @@ export default component$(() => {
             preventdefault:submit
         >
             <section>
-                <label for="first_name">Navn</label>
-                <input type="text" name="first_name" id="first_name" autoComplete="name" />
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" required autoComplete="email" />
-                <label for="password">Passord</label>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    required
-                    autoComplete="current-password"
-                    minLength={6}
-                />
+                <div>
+                    <label for="username">Brukernavn</label>
+                    <input type="text" name="username" id="username" autoComplete="name" />
+                </div>
 
-                <label for="gender">Kjønn</label>
-                <select name="gender" id="gender">
-                    <option value="not-specified">Velg</option>
-                    <option value="female">Kvinne</option>
-                    <option value="male">Mann</option>
-                    <option value="not-specified">Ikke spesifiser</option>
-                </select>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" required autoComplete="email" />
+                </div>
+                <div>
+                    <label for="password">Passord</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        required
+                        autoComplete="current-password"
+                        minLength={6}
+                    />
+                </div>
+                <div>
+                    <label for="passwordControl">Bekreft passord *</label>
+                    <input
+                        type="password"
+                        name="passwordControl"
+                        id="passwordControl"
+                        required
+                        autoComplete="current-password"
+                        minLength={6}
+                    />
+                </div>
+
+                <div class="div-form-age-gender">
+                    <div>
+                        <label for="gender">Kjønn</label>
+                        <select name="gender" id="gender">
+                            <option value="female">Kvinne</option>
+                            <option value="not-specified">Ikke spesifiser</option>
+                            <option value="male">Mann</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="age">Alder</label>
+                        <select name="age" id="age">
+                            {ageArray.map((age) => (
+                                <option value={age} key={age}>
+                                    {age.toString()}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
                 <StatusMessage message={statusMessage.message} status={statusMessage.status} />
 
                 <button
@@ -105,14 +145,9 @@ export default component$(() => {
                     }}
                     disabled={app.navIconLoading && true}
                 >
-                    Register
+                    Registrer
                 </button>
             </section>
-            <div class="register-div">
-                <Link href="/auth/sign-in" style={{ color: "var(--dark" }}>
-                    Logg inn
-                </Link>
-            </div>
         </Form>
     );
 });

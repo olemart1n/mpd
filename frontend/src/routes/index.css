@@ -1,10 +1,14 @@
 button {
-    width: 100%;
+    width: 80%;
+    display: block;
+    background-color: var(--blue-light);
+    color: var(--white);
+    margin: 0.5rem auto;
     padding: 1rem;
     border: none;
-    background-color: var(--blue);
-    color: var(--white);
     font-size: var(--font-md-plus);
+    border-radius: 6px;
+    box-shadow: var(--shadow-black) 3px 4px 10px 2px;
 }
 
 button:disabled {
@@ -17,4 +21,6 @@ section {
     display: grid;
     width: 100%;
     grid-template-columns: auto auto;
+    place-content: center;
+    gap: 0.3rem;
 }

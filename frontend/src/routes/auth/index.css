@@ -2,17 +2,16 @@ input {
     padding: 0.4rem;
     font-size: var(--font-mg);
     width: 18rem;
-    margin: auto;
 }
 label {
-    font-size: var(--font-md-plus);
-    margin: auto;
-    margin-top: 2rem;
-    padding: 0.2rem;
+    font-size: var(--font-md);
+}
+div {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem auto;
 }
 section {
-    min-height: 40%;
-    border: 1px solid var(--blue);
     flex-direction: column;
     display: flex;
     padding: 1rem 0;
@@ -61,12 +60,21 @@ h2 {
 }
 
 select {
-    width: 16rem;
-    margin: auto;
     padding: 0.4rem;
     border: 2px solid grey;
-    border-radius: 10px;
+    border-radius: 5px;
+    background-color: transparent;
+    font-size: var(--font-sm);
+    color: black;
 }
 .register-message {
     margin: auto;
+}
+
+div.div-form-age-gender {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    justify-content: space-between;
+    align-items: center;
 }

@@ -37,13 +37,13 @@ section ul button {
 @media (max-width: 750px) {
     section {
         position: fixed;
-        width: 12rem;
+        width: 13rem;
         font-size: var(--font-lg);
         flex-direction: column;
-        background-color: var(--blue);
-        opacity: 0.95;
-        top: 15%;
-        right: -12rem;
+        background-color: var(--dark);
+        height: 16rem;
+        top: 9%;
+        right: -13rem;
         transition: right 0.2s ease-in;
     }
     section.toggled {

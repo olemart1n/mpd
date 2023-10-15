@@ -1,19 +1,5 @@
-import {
-    component$,
-    useStylesScoped$,
-    useVisibleTask$,
-    $,
-    useStore,
-    useSignal,
-    useTask$,
-} from "@builder.io/qwik";
-import {
-    type RequestEvent,
-    routeAction$,
-    routeLoader$,
-    server$,
-    useLocation,
-} from "@builder.io/qwik-city";
+import { component$, useStylesScoped$, $, useStore, useTask$ } from "@builder.io/qwik";
+import { routeAction$, routeLoader$, useLocation } from "@builder.io/qwik-city";
 import { useContext } from "@builder.io/qwik";
 import { appContext } from "~/context/appState";
 import SpServer from "~/supabase/spServer";
@@ -51,6 +37,10 @@ export const useClickInterested = routeAction$(async (form, reqEv) => {
     }
     if (error?.code === "23505") {
         message.message = "Du har allerede vist interesse";
+        message.status = "error";
+    }
+    if (error?.code === "42501") {
+        message.message = "Du må logge inn.";
         message.status = "error";
     }
     return message;

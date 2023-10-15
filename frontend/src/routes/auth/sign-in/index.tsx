@@ -71,17 +71,21 @@ export default component$(() => {
         >
             <h2>Logg inn</h2>
             <section>
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" required autoComplete="email" />
-                <label for="password">Passord</label>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    required
-                    autoComplete="current-password"
-                    minLength={6}
-                />
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" required autoComplete="email" />
+                </div>
+                <div>
+                    <label for="password">Passord</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        required
+                        autoComplete="current-password"
+                        minLength={6}
+                    />
+                </div>
                 <StatusMessage message={statusMessage.message} status={statusMessage.status} />
 
                 <button
