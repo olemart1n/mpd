@@ -15,6 +15,7 @@ class SpBrowser {
         });
         return { error: error, data: data };
     }
+
     async sign_out() {
         const res = await this.supabase.auth.signOut();
         return res;

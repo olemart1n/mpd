@@ -1,16 +1,11 @@
-import { component$ } from "@builder.io/qwik";
-
-export default component$(() => {
-    return <div>Hello Qwik!</div>;
-});
-
-// import { component$, useContext, useSignal, $, useStore, useVisibleTask$ } from "@builder.io/qwik";
-// import { Form, routeAction$ } from "@builder.io/qwik-city";
+// import { component$, $, useSignal, useStylesScoped$ } from "@builder.io/qwik";
 // import SpBrowser from "~/supabase/spBrowser";
+// import { Form } from "@builder.io/qwik-city";
+// import { useContext } from "@builder.io/qwik";
 // import { appContext } from "~/context/appState";
-
-// // foreløpig sendes bildet som der, fra klienten
-// export default component$(() => {
+// import styles from "./index.css?inline";
+// export const ImageEdit = component$(() => {
+//     useStylesScoped$(styles);
 //     const app = useContext(appContext);
 //     const currentUpload = useSignal<string>("");
 //     const fileInput = useSignal<HTMLInputElement>();

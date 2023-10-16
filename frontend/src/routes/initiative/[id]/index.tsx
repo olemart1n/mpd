@@ -119,10 +119,10 @@ export default component$(() => {
 
             <StatusMessage message={status.message} status={status.status} />
             <div class="button-group">
-                <UiButton class={maybeButtonProps.class} event={maybeButtonProps.event}>
+                <UiButton class={maybeButtonProps.class} event$={maybeButtonProps.event}>
                     Har lyst
                 </UiButton>
-                <UiButton class={joinButtonProps.class} event={joinButtonProps.event}>
+                <UiButton class={joinButtonProps.class} event$={joinButtonProps.event}>
                     MedPåDet
                 </UiButton>
             </div>

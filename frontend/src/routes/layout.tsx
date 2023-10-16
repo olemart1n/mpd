@@ -12,7 +12,7 @@ import { Footer } from "~/components/footer";
 import { appContext, type App } from "~/context/appState";
 
 export default component$(() => {
-    const appState: App = useStore({ navIconLoading: false, user: null });
+    const appState: App = useStore({ navIconLoading: false, user: null, dialogOpen: false });
     useContextProvider(appContext, appState);
     const app = useContext(appContext);
     useVisibleTask$(() => {

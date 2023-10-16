@@ -3,8 +3,9 @@ button {
     border: 2px solid var(--green);
     padding: 0.3rem 1rem;
     border-radius: 0.2rem;
-
     color: var(--dark);
+    display: block;
+    margin: 0.4rem auto;
 }
 .hight-light {
     background-color: var(--green-light);

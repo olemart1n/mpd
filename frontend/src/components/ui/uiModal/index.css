@@ -1,0 +1,28 @@
+dialog {
+    min-width: 15rem;
+    min-height: 15rem;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    border: 1px solid var(--dark);
+    border-radius: 6px;
+}
+
+.div-avbryt {
+    display: flex;
+    place-content: end;
+    border-bottom: 1px solid var(--dark);
+}
+
+.div-avbryt button {
+    border: none;
+    padding: 0.2rem 1rem;
+    background-color: var(--dark);
+    font-size: var(--font-md);
+    color: white;
+    border-radius: 6px;
+    margin: 0.2rem 0.2rem;
+}
+.slot-wrapper {
+    width: auto;
+}

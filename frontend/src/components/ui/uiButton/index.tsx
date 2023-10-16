@@ -4,24 +4,15 @@ import styles from "./index.css?inline";
 
 interface uiBtn {
     // event?: { onClick$?: PropFunction<() => void> };
-    event: () => void;
+    event$: () => void;
     class: string | null;
 }
 
 export const UiButton = component$<uiBtn>((props: uiBtn) => {
     useStylesScoped$(styles);
     return (
-        <button onClick$={props.event} class={props.class}>
+        <button onClick$={props.event$} class={props.class}>
             <Slot />
         </button>
     );
 });
-// export const UiButton = component$<{
-//     onClick$?: PropFunction<() => void>;
-// }>((props) => {
-//     return (
-//         <button onClick$={props.onClick$}>
-//             <Slot />
-//         </button>
-//     );
-// });

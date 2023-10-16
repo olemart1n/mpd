@@ -1,12 +1,22 @@
 section {
     margin: 1rem auto;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 40% 1fr;
 }
 
 .profile-icon {
     font-size: 6rem;
 }
+.image-div {
+    text-align: center;
+}
+.image-div .add-image-button {
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    font-size: larger;
+}
+
 .info-div h1 {
     font-size: var(--font-md);
     width: fit-content;
@@ -23,4 +33,10 @@ section {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+}
+.current-upload-image {
+    display: block;
+    margin: auto;
+    height: 10rem;
+    width: auto;
 }

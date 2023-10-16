@@ -7,7 +7,6 @@ import { LuLogOut } from "@qwikest/icons/lucide";
 const signOut = server$(async function () {
     const sp = new SpServer(this as RequestEvent);
     const error = await sp.log_out();
-    console.log(error);
     return error;
 });
 
@@ -21,7 +20,9 @@ export const ButtonSignOut = component$(({ value }: Signal) => {
                 localStorage.clear();
                 nav("/");
                 value.value = !value.value;
-                document.location.reload();
+                setTimeout(() => {
+                    document.location.reload();
+                }, 500);
             }}
         >
             <LuLogOut /> Logg ut

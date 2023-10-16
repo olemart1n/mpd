@@ -25,7 +25,6 @@ export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
         email: email.toString(),
         password: password.toString(),
     });
-    console.log(data, error);
     const id = data.user?.id;
     if (id) {
         messageToClient.message = "Du er innlogget";
