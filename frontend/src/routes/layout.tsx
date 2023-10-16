@@ -35,9 +35,17 @@ export default component$(() => {
     );
 });
 
+// export const onGet: RequestHandler = async ({ cacheControl }) => {
+//     cacheControl({
+//         staleWhileRevalidate: 60 * 60 * 24 * 7,
+//         maxAge: 5,
+//     });
+// };
+
 export const onGet: RequestHandler = async ({ cacheControl }) => {
     cacheControl({
-        staleWhileRevalidate: 60 * 60 * 24 * 7,
-        maxAge: 5,
+        maxAge: 0,
+        sMaxAge: 0,
+        staleWhileRevalidate: 0,
     });
 };

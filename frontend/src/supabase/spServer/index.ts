@@ -31,14 +31,18 @@ class SpServer {
 
         return { user, error };
     }
+    async get_logged_in_user_profile(table: string, id: string) {
+        const { data: user, error } = await this.supabase.from(table).select("*").eq("id", id);
+        return { user, error };
+    }
 
     async post(table: string, postData: object) {
         const { data, error } = await this.supabase.from(table).insert(postData);
         return { data, error };
     }
-    async get_initiatives_desc(table: string) {
+    async get_initiatives_desc() {
         const { data, error } = await this.supabase
-            .from(table)
+            .from("initiatives")
             .select("*")
             .order("created_at", { ascending: false });
         return { data, error };
@@ -60,17 +64,17 @@ class SpServer {
         return { data, error };
     }
     channel_initiatives() {
-        const channel = this.supabase
+        this.supabase
             .channel("initiatives_channel")
             .on(
                 "postgres_changes",
                 { event: "*", schema: "public", table: "initiatives" },
                 (event) => {
                     console.log(event);
+                    return event;
                 }
             )
             .subscribe();
-        return channel;
     }
     channel_interested(id: string | {}) {
         function hasInitiativeId(newInterest: any): newInterest is { initiative_id: number } {

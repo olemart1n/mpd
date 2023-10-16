@@ -76,5 +76,6 @@ div.div-form-age-gender {
     flex-direction: row;
     width: 80%;
     justify-content: space-between;
+    margin: 0 auto;
     align-items: center;
 }

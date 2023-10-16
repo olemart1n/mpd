@@ -6,7 +6,7 @@ import {
     useVisibleTask$,
     useStore,
 } from "@builder.io/qwik";
-import { Form, routeAction$, useNavigate } from "@builder.io/qwik-city";
+import { Form, routeAction$, useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import styles from "./index.css?inline";
 import SpServer from "~/supabase/spServer";
 import { useContext } from "@builder.io/qwik";
@@ -133,7 +133,7 @@ export default component$(() => {
                 </select>
             </div>
             <div class="textarea-div form-div">
-                <label for="text">Skriv noe mer</label>
+                <label for="text">Hva hadde du tenkt?</label>
                 <textarea name="text" id="text" cols={30} rows={5} required></textarea>
             </div>
             <StatusMessage message={statusMessage.message} status={statusMessage.status} />
@@ -141,3 +141,17 @@ export default component$(() => {
         </Form>
     );
 });
+
+export const head: DocumentHead = {
+    title: "MedPåDet",
+    meta: [
+        {
+            name: "description",
+            content: "Lag en insj",
+        },
+        {
+            name: "viewport",
+            content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+        },
+    ],
+};

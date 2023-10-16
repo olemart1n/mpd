@@ -1,26 +1,33 @@
 input {
-    font-size: var(--font-md-plus);
+    font-size: var(--font-md);
+    border: none;
     color: var(--dark);
+    border-radius: 6px;
 }
 
 select {
     font-size: var(--font-md);
+    color: var(--dark);
+    border: none;
+    border-radius: 6px;
 }
 
 .form-div {
     width: 16rem;
-    margin: 1rem auto;
+    margin: 1.3rem auto;
     display: flex;
     flex-direction: column;
+    border-bottom: 0.5px solid var(--dark);
 }
 
 .form-div.number-of-attendees {
-    flex-direction: row;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 50% 50%;
     align-items: center;
 }
 .form-div.date {
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 50% 50%;
     justify-content: space-around;
     align-items: center;
 }
@@ -28,15 +35,17 @@ select {
     font-size: var(--font-md);
 }
 .form-div.clock {
-    flex-direction: row;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 50% 50%;
     align-items: center;
 }
 .form-div.clock input {
     font-size: var(--font-md);
 }
 .form-div.category {
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 50% 50%;
+
     align-items: center;
 }
 .form-div.category select {
@@ -46,6 +55,7 @@ select {
 .textarea-div {
     display: flex;
     flex-direction: column;
+    border: none;
 }
 
 button {

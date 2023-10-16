@@ -1,9 +1,11 @@
 button {
-    border: 2px solid var(--white);
-    border-radius: 3px;
-    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    border: none;
+    padding: 0.1rem 0.5rem;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
     font-size: var(--font-md);
-    color: var(--dark);
+    color: var(--white);
     width: max-content;
-    margin: 1rem 2rem;
 }

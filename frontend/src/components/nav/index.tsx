@@ -13,6 +13,7 @@ import { ButtonSignOut } from "./ButtonSignOut";
 import { NavIcon } from "./NavIcon";
 import { appContext } from "~/context/appState";
 import { useNavigate, Link } from "@builder.io/qwik-city";
+import { LuUserSquare, LuLogIn, LuUserPlus2 } from "@qwikest/icons/lucide";
 export const Nav = component$(() => {
     const app = useContext(appContext);
     const nav = useNavigate();
@@ -28,6 +29,12 @@ export const Nav = component$(() => {
         navIsToggled.value = false;
     });
     useVisibleTask$(() => {
+        window.addEventListener("touchstart", (e) => {
+            if (navIsToggled.value === false) return;
+            if (drag.menu.value && e.touches[0].clientX < drag.menu.value.offsetLeft) {
+                navIsToggled.value = false;
+            }
+        });
         drag.menu.value?.addEventListener("touchstart", (e: any) => {
             drag.startX = e.touches[0].clientX;
         });
@@ -52,21 +59,28 @@ export const Nav = component$(() => {
                 {app.user ? (
                     <ul>
                         <li>
-                            <button onClick$={() => navigate("/user")}>Bruker</button>
+                            <button onClick$={() => navigate("/user")}>
+                                <LuUserSquare class="nav-icon" />
+                                Bruker
+                            </button>
                         </li>
 
-                        <li>
-                            <ButtonSignOut value={navIsToggled} />
-                        </li>
+                        <ButtonSignOut value={navIsToggled} />
                     </ul>
                 ) : (
                     <ul>
                         <li>
-                            <button onClick$={() => navigate("/auth/sign-in")}>Logg inn</button>
+                            <button onClick$={() => navigate("/auth/sign-in")}>
+                                <LuLogIn class="nav-icon" />
+                                Logg inn
+                            </button>
                         </li>
 
                         <li>
-                            <button onClick$={() => navigate("/auth/sign-up")}>Registrer</button>
+                            <button onClick$={() => navigate("/auth/sign-up")}>
+                                <LuUserPlus2 class="nav-icon" />
+                                Registrer
+                            </button>
                         </li>
                     </ul>
                 )}

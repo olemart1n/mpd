@@ -7,11 +7,11 @@ import SpServer from "~/supabase/spServer";
 import { useContext } from "@builder.io/qwik";
 import { appContext } from "~/context/appState";
 import { UiLoader } from "~/components/ui/uiLoader";
+
 export const useSpFetch = routeLoader$(async (reqEv) => {
     const sp = new SpServer(reqEv);
-    const { error, data: initiatives } = await sp.get_initiatives_desc("initiatives");
+    const { error, data: initiatives } = await sp.get_initiatives_desc();
     if (error) console.log(error);
-    console.log("hello");
     return { initiatives };
 });
 
@@ -20,13 +20,14 @@ export default component$(() => {
     const fetchSignal = useSpFetch();
     const app = useContext(appContext);
     const nav = useNavigate();
+
     return fetchSignal.value.initiatives ? (
         <>
             <button onClick$={() => nav("/create-initiative")} disabled={!app.user && true}>
                 {!app.user ? "Du må være innlogget for å insje" : "Lag en insj"}
             </button>
             <section>
-                {fetchSignal.value.initiatives.map((val) => (
+                {fetchSignal.value.initiatives.map((val: any) => (
                     <Card values={val} key={val.id} />
                 ))}
             </section>

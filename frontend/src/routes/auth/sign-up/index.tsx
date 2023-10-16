@@ -8,7 +8,6 @@ import { StatusMessage, type ApiMessage } from "~/components/ui/statusMessage";
 import { createServerClient } from "supabase-auth-helpers-qwik";
 
 export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
-    console.log(form);
     const { email, password, username, passwordControl, gender, age } = form;
     type MessageToClient = {
         message: string;
@@ -39,7 +38,6 @@ export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
             },
         },
     });
-    console.log(data, error);
     const id = data.user?.id;
     if (id) {
         messageToClient.message = "Velkommen😀 Logg inn i neste steg";
@@ -75,7 +73,6 @@ export default component$(() => {
     for (let i = 0; i < 100; i++) {
         ageArray.push(i);
     }
-    console.log(ageArray);
     return (
         <Form
             style={{ display: "flex", flexDirection: "column", height: "100%" }}
