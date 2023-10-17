@@ -9,6 +9,8 @@ import SpServerClass from "~/supabase/spServer";
 import { type User } from "supabase-auth-helpers-qwik";
 
 export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
+    const { origin } = reqEv.url;
+    const { cookie } = reqEv;
     const { email, password } = form;
     type MessageToClient = {
         message: string;
@@ -25,6 +27,26 @@ export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
         email: email.toString(),
         password: password.toString(),
     });
+    //----------------set cookie for mobile dev
+    if (origin === "http://192.168.10.175:5173") {
+        console.log("logged in from mobile");
+        const cookieArray = JSON.stringify([
+            data.session?.access_token,
+            data.session?.refresh_token,
+            null,
+            null,
+            null,
+        ]);
+        cookie.set("supabase-auth-token", encodeURIComponent(cookieArray), {
+            httpOnly: true,
+            maxAge: [1, "hours"],
+            path: "/",
+            sameSite: "lax",
+            secure: false,
+        });
+    }
+
+    //-----------------------------------------
     const id = data.user?.id;
     if (id) {
         messageToClient.message = "Du er innlogget";

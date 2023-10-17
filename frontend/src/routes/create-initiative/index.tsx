@@ -14,7 +14,6 @@ import { appContext } from "~/context/appState";
 import type { ApiMessage } from "~/components/ui/statusMessage";
 import { StatusMessage } from "~/components/ui/statusMessage";
 export const useSpCreateInsj = routeAction$(async (form, reqEv) => {
-    console.log(form);
     const sp = new SpServer(reqEv);
     const { data, error } = await sp.post("initiatives", form);
 

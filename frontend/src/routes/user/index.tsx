@@ -1,4 +1,4 @@
-import { component$, useSignal, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useSignal, useStylesScoped$, useVisibleTask$, $ } from "@builder.io/qwik";
 import styles from "./index.css?inline";
 import { useContext } from "@builder.io/qwik";
 import { appContext } from "~/context/appState";
@@ -7,7 +7,9 @@ import { routeLoader$ } from "@builder.io/qwik-city";
 import SpServer from "~/supabase/spServer";
 import { UiModal } from "~/components/ui/uiModal";
 import { UiButton } from "~/components/ui/uiButton";
-
+import { UiLoader2 } from "~/components/ui/uiLoader2";
+import SpBrowser from "~/supabase/spBrowser";
+import imageCompression from "browser-image-compression";
 export const useSpFetchProfile = routeLoader$(async (reqEv) => {
     const sp = new SpServer(reqEv);
     try {
@@ -27,6 +29,7 @@ export default component$(() => {
     const app = useContext(appContext);
     const fileInput = useSignal<HTMLInputElement>();
     const currentUpload = useSignal<string>();
+    const isLoading = useSignal(false);
     useStylesScoped$(styles);
     useVisibleTask$(({ track }) => {
         track(() => currentUpload.value);
@@ -34,6 +37,34 @@ export default component$(() => {
             app.dialogOpen = true;
         }
     });
+
+    const sendToSp = $(async (file: File) => {
+        isLoading.value = true;
+        try {
+            const compressedFile = await imageCompression(file, {
+                maxSizeMB: 0.05,
+                maxWidthOrHeight: 780,
+                useWebWorker: true,
+            });
+            console.log(compressedFile.type);
+            const sp = new SpBrowser();
+            const { error, data } = await sp.send_file(
+                "avatars",
+                app.user?.id as string,
+                compressedFile,
+                compressedFile.type
+            );
+            console.log(error);
+            console.log(data);
+            if (!error) {
+                isLoading.value = false;
+                app.dialogOpen = false;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
     return (
         <div>
             {" "}
@@ -50,18 +81,31 @@ export default component$(() => {
 
                         <p>{fetch.value.user.email}</p>
                     </div>
-                    {/* component for understanding open/close logic */}
+                    {/* see component for understanding open/close logic */}
                     <UiModal>
-                        <img
-                            src={currentUpload.value}
-                            alt="avatar"
-                            height={100}
-                            width={70}
-                            class="current-upload-image"
-                        />
-                        <UiButton event$={() => console.log("hello")} class="success">
-                            Last opp
-                        </UiButton>
+                        {currentUpload.value && (
+                            <img
+                                src={currentUpload.value}
+                                alt="avatar"
+                                height={100}
+                                width={70}
+                                class="current-upload-image"
+                            />
+                        )}
+                        {isLoading.value ? (
+                            <div class="loader-div">
+                                <UiLoader2 />
+                            </div>
+                        ) : (
+                            <UiButton
+                                click$={() => {
+                                    fileInput.value?.files && sendToSp(fileInput.value.files[0]);
+                                }}
+                                class="success"
+                            >
+                                Last opp
+                            </UiButton>
+                        )}
                     </UiModal>
                     <input
                         type="file"
@@ -76,7 +120,6 @@ export default component$(() => {
                         }}
                         hidden
                     />
-                    <button onClick$={() => (app.dialogOpen = true)}>hello</button>
                 </section>
             ) : (
                 <p>Kunne ikke laste inn bruker</p>
