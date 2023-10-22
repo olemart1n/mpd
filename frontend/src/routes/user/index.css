@@ -1,15 +1,21 @@
 section {
-    margin: 1rem auto;
+    margin: 1.5rem auto;
     display: grid;
     grid-template-columns: 40% 1fr;
 }
 
 .profile-icon {
     font-size: 6rem;
+    max-height: 100px;
 }
 .image-div {
     text-align: center;
     position: relative;
+}
+
+.image-div img {
+    object-fit: cover;
+    box-shadow: var(--shadow-black) 2px 2px 7px 2px;
 }
 .image-div .add-image-button {
     border: none;

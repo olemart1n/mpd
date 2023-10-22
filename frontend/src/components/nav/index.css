@@ -2,16 +2,15 @@ nav {
     display: grid;
     grid-template-columns: auto max-content;
     padding: 0.3rem 0.5rem;
-    margin: 0.5rem auto;
+    margin: 0;
+    align-content: center;
     overflow: hidden;
 }
 
 .toggle-button-div {
-    position: absolute;
-    min-width: 0.5rem;
-    min-height: 0.5rem;
-    right: 1rem;
-    top: 1rem;
+    position: relative;
+    min-width: 3rem;
+    min-height: 2.5rem;
 }
 section {
     z-index: 10;
@@ -51,14 +50,14 @@ section ul li button .nav-icon {
 @media (max-width: 750px) {
     section {
         position: fixed;
-        width: 13rem;
+        width: 14rem;
         font-size: var(--font-md-plus);
         flex-direction: column;
         background-color: var(--dark);
-        height: 16rem;
+        height: 20rem;
         border-radius: 6px;
-        top: 10%;
-        right: -13rem;
+        top: 18%;
+        right: -14rem;
         transition: right 0.2s ease-in;
     }
     section.toggled {

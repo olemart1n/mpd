@@ -52,7 +52,15 @@ export const Nav = component$(() => {
     });
     return (
         <nav>
-            <Link href="/" style={{ color: "var(--dark)", width: "fit-content" }}>
+            <Link
+                href="/"
+                style={{
+                    color: "var(--dark)",
+                    width: "fit-content",
+                    display: "flex",
+                    alignItems: "center",
+                }}
+            >
                 <h1 style={{ width: "fit-content" }}>MedPåDet</h1>
             </Link>
             <section class={navIsToggled.value && "toggled"} ref={drag.menu}>
@@ -62,6 +70,12 @@ export const Nav = component$(() => {
                             <button onClick$={() => navigate("/user")}>
                                 <LuUserSquare class="nav-icon" />
                                 Bruker
+                            </button>
+                        </li>
+                        <li>
+                            <button onClick$={() => navigate("/user/initiatives")}>
+                                <LuUserSquare class="nav-icon" />
+                                Dine insjer
                             </button>
                         </li>
 
@@ -88,8 +102,6 @@ export const Nav = component$(() => {
             <div class="toggle-button-div">
                 <NavIcon value={navIsToggled} />
             </div>
-
-            {/* <ButtonLogin /> */}
         </nav>
     );
 });

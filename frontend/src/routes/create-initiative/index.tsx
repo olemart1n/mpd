@@ -11,8 +11,7 @@ import styles from "./index.css?inline";
 import SpServer from "~/supabase/spServer";
 import { useContext } from "@builder.io/qwik";
 import { appContext } from "~/context/appState";
-import type { ApiMessage } from "~/components/ui/statusMessage";
-import { StatusMessage } from "~/components/ui/statusMessage";
+import { type UiResponse, UxServerResponse } from "~/components/ux/uxServerResponse";
 export const useSpCreateInsj = routeAction$(async (form, reqEv) => {
     const sp = new SpServer(reqEv);
     const { data, error } = await sp.post("initiatives", form);
@@ -44,7 +43,7 @@ export default component$(() => {
             currentTime.value = e.value;
         };
     });
-    const statusMessage = useStore<ApiMessage>({ message: undefined, status: undefined });
+    const statusMessage = useStore<UiResponse>({ message: undefined, status: undefined });
     useVisibleTask$(({ track }) => {
         track(() => action.value);
         if (!action.status) return;
@@ -65,17 +64,10 @@ export default component$(() => {
             <input type="text" name="author_id" id="author_id" hidden value={app.user?.id} />
             <input
                 type="text"
-                name="author_name"
-                id="author_name"
+                name="author_username"
+                id="author_username"
                 hidden
-                value={app.user?.user_metadata.first_name}
-            />
-            <input
-                type="text"
-                name="author_name"
-                id="author_name"
-                hidden
-                value={app.user?.user_metadata.first_name}
+                value={app.user?.user_metadata.username}
             />
             <div class="form-div">
                 <label for="title">Tittel</label>
@@ -137,7 +129,7 @@ export default component$(() => {
                 <label for="text">Hva hadde du tenkt?</label>
                 <textarea name="text" id="text" cols={30} rows={5} required></textarea>
             </div>
-            <StatusMessage message={statusMessage.message} status={statusMessage.status} />
+            <UxServerResponse message={statusMessage.message} status={statusMessage.status} />
             <button type="submit">INSJ!</button>
         </Form>
     );

@@ -4,7 +4,7 @@ import { Form, routeAction$, Link, useNavigate } from "@builder.io/qwik-city";
 import styles from "../index.css?inline";
 import { appContext } from "~/context/appState";
 import { useContext } from "@builder.io/qwik";
-import { StatusMessage, type ApiMessage } from "~/components/ui/statusMessage";
+import { UxServerResponse, type UiResponse } from "~/components/ux/uxServerResponse";
 import SpServerClass from "~/supabase/spServer";
 import { type User } from "supabase-auth-helpers-qwik";
 
@@ -28,8 +28,7 @@ export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
         password: password.toString(),
     });
     //----------------set cookie for mobile dev
-    if (origin === "http://192.168.10.175:5173") {
-        console.log("logged in from mobile");
+    if (origin === "http://192.168.10.175:4173" || origin === "http://192.168.10.175:5173") {
         const cookieArray = JSON.stringify([
             data.session?.access_token,
             data.session?.refresh_token,
@@ -64,7 +63,7 @@ export default component$(() => {
     useStylesScoped$(styles);
     const action = useSupabaseLogin();
     const nav = useNavigate();
-    const statusMessage: ApiMessage = useStore({
+    const statusMessage: UiResponse = useStore({
         message: undefined,
         status: undefined,
     });
@@ -107,7 +106,7 @@ export default component$(() => {
                         minLength={6}
                     />
                 </div>
-                <StatusMessage message={statusMessage.message} status={statusMessage.status} />
+                <UxServerResponse message={statusMessage.message} status={statusMessage.status} />
 
                 <button
                     type="submit"

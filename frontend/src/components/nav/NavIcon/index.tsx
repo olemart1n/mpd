@@ -8,10 +8,11 @@ export const NavIcon = component$(({ value }: Signal) => {
 
     return (
         <button
-            class={app.navIconLoading ? "loading" : value.value ? "toggled" : ""}
             onClick$={() => {
                 value.value = !value.value;
             }}
-        ></button>
+        >
+            <span class={app.navIconLoading ? "loading" : value.value ? "toggled" : ""}></span>
+        </button>
     );
 });

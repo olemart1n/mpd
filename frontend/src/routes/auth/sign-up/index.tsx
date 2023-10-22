@@ -4,7 +4,7 @@ import { Form, routeAction$, useNavigate } from "@builder.io/qwik-city";
 import styles from "../index.css?inline";
 import { appContext } from "~/context/appState";
 import { useContext } from "@builder.io/qwik";
-import { StatusMessage, type ApiMessage } from "~/components/ui/statusMessage";
+import { UxServerResponse, type UiResponse } from "~/components/ux/uxServerResponse";
 import { createServerClient } from "supabase-auth-helpers-qwik";
 
 export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
@@ -54,7 +54,7 @@ export default component$(() => {
     useStylesScoped$(styles);
     const action = useSupabaseSignUp();
     const nav = useNavigate();
-    const statusMessage: ApiMessage = useStore({
+    const statusMessage: UiResponse = useStore({
         message: undefined,
         status: undefined,
     });
@@ -133,7 +133,7 @@ export default component$(() => {
                     </div>
                 </div>
 
-                <StatusMessage message={statusMessage.message} status={statusMessage.status} />
+                <UxServerResponse message={statusMessage.message} status={statusMessage.status} />
 
                 <button
                     type="submit"

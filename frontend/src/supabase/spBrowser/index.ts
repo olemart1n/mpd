@@ -23,3 +23,36 @@ class SpBrowser {
 }
 
 export default SpBrowser;
+
+// channel_initiatives() {
+//     this.supabase
+//         .channel("initiatives_channel")
+//         .on(
+//             "postgres_changes",
+//             { event: "*", schema: "public", table: "initiatives" },
+//             (event) => {
+//                 console.log(event);
+//                 return event;
+//             }
+//         )
+//         .subscribe();
+// }
+// channel_interested(id: string | {}) {
+//     function hasInitiativeId(newInterest: any): newInterest is { initiative_id: number } {
+//         return "initiative_id" in newInterest;
+//     }
+//     const channel = this.supabase
+//         .channel("interested_channel")
+//         .on(
+//             "postgres_changes",
+//             { event: "*", schema: "public", table: "interested" },
+//             (event) => {
+//                 const { new: newInterest } = event;
+
+//                 if (hasInitiativeId(newInterest) === id) return newInterest;
+//                 // if (newInterest.initiative_id === id) return newInterest;
+//             }
+//         )
+//         .subscribe();
+//     return channel;
+// }

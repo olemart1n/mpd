@@ -6,8 +6,7 @@ import { LuUserSquare, LuPenSquare } from "@qwikest/icons/lucide";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import SpServer from "~/supabase/spServer";
 import { UiModal } from "~/components/ui/uiModal";
-import { UiButton } from "~/components/ui/uiButton";
-import { UiLoader2 } from "~/components/ui/uiLoader2";
+import { UiButton, UiLoader2 } from "~/components/ui";
 import SpBrowser from "~/supabase/spBrowser";
 import imageCompression from "browser-image-compression";
 export const useSpFetchProfile = routeLoader$(async (reqEv) => {
@@ -71,17 +70,26 @@ export default component$(() => {
             {fetch.value?.OK ? (
                 <section>
                     <div class="image-div">
-                        <LuUserSquare class="profile-icon" />
-                        <button class="add-image-button" onClick$={() => fileInput.value?.click()}>
-                            <LuPenSquare />
-                        </button>
+                        {fetch.value.user.avatar ? (
+                            <img src={fetch.value.user.avatar} height={100} width={100} />
+                        ) : (
+                            <>
+                                {" "}
+                                <LuUserSquare class="profile-icon" />
+                                <button
+                                    class="add-image-button"
+                                    onClick$={() => fileInput.value?.click()}
+                                >
+                                    <LuPenSquare />
+                                </button>
+                            </>
+                        )}
                     </div>
                     <div class="info-div">
                         <h1>{fetch.value.user.username}</h1>
 
                         <p>{fetch.value.user.email}</p>
                     </div>
-                    {/* see component for understanding open/close logic */}
                     <UiModal>
                         {currentUpload.value && (
                             <img
