@@ -64,6 +64,18 @@ class SpServer {
         if (error) console.log(error);
         return { data, error };
     }
+    async get_group(group_id: string) {
+        const { data, error } = await this.supabase
+            .from("groups")
+            .select(
+                "*, attendees: group_attendees(*, profile: profile_id(*)), messages: group_messages(*), initiative: initiative_id(*)"
+            )
+            .eq("id", group_id)
+            .single();
+        console.log(data);
+        if (error) console.log(error);
+        return { data, error };
+    }
 
     async get_by_id(table: string, id: string) {
         const { data, error } = await this.supabase.from(table).select("*").eq("id", id);
@@ -101,6 +113,19 @@ class SpServer {
             .eq("initiative_id", iId);
         if (error) console.log("error updating row :" + error);
         return { data, error };
+    }
+    channel_group_messages() {
+        this.supabase
+            .channel("group_message_channel")
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "group_messages" },
+                (event) => {
+                    console.log(event.new);
+                    return event;
+                }
+            )
+            .subscribe();
     }
     async check_for_deleted(id: string, iId: string) {
         const { data, error } = await this.supabase

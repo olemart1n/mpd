@@ -2,12 +2,12 @@ import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import styles from "./index.css?inline";
 import { useNavigate } from "@builder.io/qwik-city";
-import { Card } from "~/components/ui/uiCardInitiative";
+import { CardInitiative } from "~/components/cards/CardInitiative";
 import SpServer from "~/supabase/spServer";
 import { useContext } from "@builder.io/qwik";
 import { appContext } from "~/context/appState";
 import { UiLoader } from "~/components/ui/uiLoader";
-
+import { UiButton } from "~/components";
 export const useSpFetch = routeLoader$(async (reqEv) => {
     const sp = new SpServer(reqEv);
     const { error, data: initiatives } = await sp.get_initiatives_desc();
@@ -23,12 +23,12 @@ export default component$(() => {
 
     return fetchSignal.value.initiatives ? (
         <>
-            <button onClick$={() => nav("/create-initiative")} disabled={!app.user && true}>
+            <UiButton click$={() => nav("/create-initiative")} class={!app.user ? "error" : ""}>
                 {!app.user ? "Du må være innlogget for å insje" : "Lag en insj"}
-            </button>
+            </UiButton>
             <section>
                 {fetchSignal.value.initiatives.map((val: any) => (
-                    <Card values={val} key={val.id} />
+                    <CardInitiative values={val} key={val.id} />
                 ))}
             </section>
         </>

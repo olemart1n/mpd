@@ -7,7 +7,7 @@ interface CardType {
     title: string | undefined;
     category: string | undefined;
     author_id: string | undefined;
-    author_name: string | null;
+    author_username: string | null;
     interested_count: string | null;
 }
 
@@ -15,7 +15,7 @@ type CardInfo = {
     values: CardType;
 };
 
-export const Card = component$(({ values }: CardInfo) => {
+export const CardInitiative = component$(({ values }: CardInfo) => {
     useStylesScoped$(styles);
     return (
         <div>
@@ -23,15 +23,16 @@ export const Card = component$(({ values }: CardInfo) => {
                 href={"initiative/" + values.id}
                 style={{
                     color: "var(--dark)",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
                     textDecoration: "none",
+                    backgroundColor: "transparent",
                 }}
             >
-                <h5>{values.author_name}</h5>
-                <p>{values.title}</p>
-                <p>{values.category}</p>
+                <section class="meta">
+                    {" "}
+                    <p>{values.title}</p>
+                    <p>{values.category}</p>
+                    <p>{values.author_username}</p>
+                </section>
 
                 <p class="count">{values.interested_count}</p>
             </Link>
