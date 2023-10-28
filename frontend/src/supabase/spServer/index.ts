@@ -77,11 +77,10 @@ class SpServer {
         const { data, error } = await this.supabase
             .from("groups")
             .select(
-                "*, attendees: group_attendees(*, profile: profile_id(*)), messages: group_messages(*, author_id(*)), initiative: initiative_id(*, profiles(age))"
+                "*, attendees: group_attendees(*, profile: profile_id(*)), messages: group_messages(*), initiative: initiative_id(*, profiles(age))"
             )
             .eq("id", group_id)
             .single();
-        console.log(data);
         if (error) console.log(error);
         return { data, error };
     }

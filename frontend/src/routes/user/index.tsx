@@ -24,7 +24,6 @@ export const useProfile = routeLoader$(async (reqEv) => {
 });
 
 export default component$(() => {
-    const fetch = useProfile();
     const app = useContext(appContext);
     const fileInput = useSignal<HTMLInputElement>();
     const currentUpload = useSignal<string>();
@@ -46,20 +45,20 @@ export default component$(() => {
                 maxWidthOrHeight: 780,
                 useWebWorker: true,
             });
-            console.log(compressedFile.type);
             const sp = new SpBrowser();
-            const { error, data } = await sp.send_file(
+            const { error } = await sp.send_file(
                 "avatars",
                 app.profile?.id as string,
                 compressedFile,
                 compressedFile.type
             );
-            console.log("logged from within the sendToSp function");
-            console.log(error);
-            console.log(data);
             if (!error) {
                 isLoading.value = false;
                 app.dialogOpen = false;
+                app.profile &&
+                    (app.profile.avatar =
+                        "https://oilmvgzqferfdqjvtsxz.supabase.co/storage/v1/object/public/avatars/52af9099-f0a1-443b-b081-fedd00c217ed" +
+                        app.profile.id);
             }
         } catch (error) {
             console.log(error);
@@ -69,11 +68,11 @@ export default component$(() => {
     return (
         <div>
             {" "}
-            {fetch.value?.OK ? (
+            {app.profile ? (
                 <section>
                     <div class="image-div">
-                        {fetch.value.user.avatar ? (
-                            <img src={fetch.value.user.avatar} height={100} width={100} />
+                        {app.profile.avatar ? (
+                            <img src={app.profile.avatar} height={100} width={100} />
                         ) : (
                             <>
                                 {" "}
@@ -88,9 +87,9 @@ export default component$(() => {
                         )}
                     </div>
                     <div class="info-div">
-                        <h1>{fetch.value.user.username}</h1>
+                        <h1>{app.profile.username}</h1>
 
-                        <p>{fetch.value.user.email}</p>
+                        <p>{app.profile.email}</p>
                     </div>
                     <UiModal>
                         {currentUpload.value && (

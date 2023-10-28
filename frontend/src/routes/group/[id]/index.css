@@ -3,7 +3,7 @@ section {
     grid-template-columns: 60% auto;
     gap: 1rem;
     padding: 0.2rem;
-    min-height: 40%;
+    height: 40%;
 }
 
 .initiative-meta {
@@ -32,4 +32,52 @@ h1 {
 
 .attendees img {
     border-radius: 50%;
+}
+
+.messages {
+    height: 20rem;
+    overflow: scroll;
+}
+
+.message {
+    display: flex;
+    margin: 0.3rem auto;
+}
+.message-avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    margin: auto;
+    display: block;
+}
+.chat-avatar-icon {
+    height: 50px;
+    width: 50px;
+    margin: auto;
+    display: block;
+}
+.message-line {
+    border-radius: 6px;
+    border: 1px solid var(--turk);
+    margin: auto;
+}
+
+.message p {
+    width: 15rem;
+    margin: 0.2rem;
+    word-wrap: break-word;
+}
+.chat-container button {
+    display: block;
+    border-radius: 100%;
+    width: 2rem;
+    height: 2rem;
+    background-color: #fff;
+    text-align: center;
+    border: 1px solid var(--dark);
+}
+.chat-container input {
+    font-size: var(--font-sm);
+    padding: 0.2rem;
+    width: 14rem;
+    margin: auto 0.3rem;
 }
