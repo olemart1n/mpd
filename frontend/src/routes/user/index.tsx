@@ -30,7 +30,6 @@ export default component$(() => {
     const isLoading = useSignal(false);
     useStylesScoped$(styles);
     useVisibleTask$(({ track }) => {
-        console.log("h3llo");
         track(() => currentUpload.value);
         if (currentUpload.value) {
             app.dialogOpen = true;

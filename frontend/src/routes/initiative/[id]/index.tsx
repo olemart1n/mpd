@@ -23,7 +23,6 @@ export const useSpFetchInitiative = routeLoader$(async (reqEv) => {
     const { id } = reqEv.params;
     const sp = new SpServer(reqEv);
     const { data } = await sp.get_initiative(id);
-    console.log(data);
     return data;
 });
 // CANCEL INTEREST

@@ -2,7 +2,7 @@ import {
     component$,
     useSignal,
     useStylesScoped$,
-    // useVisibleTask$,
+    useVisibleTask$,
     useStore,
     useTask$,
 } from "@builder.io/qwik";
@@ -11,26 +11,23 @@ import SpServer from "~/supabase/spServer";
 import { LuUserCircle, LuSend } from "@qwikest/icons/lucide";
 import { useContext } from "@builder.io/qwik";
 import { appContext } from "~/context/appState";
-// import { AttendeeCard } from "~/components/cards/attendeeCard";
 import styles from "./index.css?inline";
+import type { MessageSubscription } from "~/utils";
 
-// import { createBrowserClient } from "supabase-auth-helpers-qwik";
+import { createBrowserClient } from "supabase-auth-helpers-qwik";
 export const useGetGroup = routeLoader$(async (reqEv) => {
     const { id } = reqEv.params;
     const sp = new SpServer(reqEv);
     const { data } = await sp.get_group(id as string);
-    // console.log(data.messages[0]?.author_id);
     return data;
 });
 
 export const useSendChatMessage = routeAction$(async (form, reqEv) => {
     const { id } = reqEv.params;
-
     const message = { group_id: id, ...form };
-    console.log(message);
     const sp = new SpServer(reqEv);
     const { data } = await sp.post("group_messages", message);
-    console.log(data);
+    return data;
 });
 
 export default component$(() => {
@@ -41,23 +38,24 @@ export default component$(() => {
     const avatarUrl = "https://oilmvgzqferfdqjvtsxz.supabase.co/storage/v1/object/public/avatars/";
     const messages = useStore(data.value.messages);
     const routeAction = useSendChatMessage();
-    // useVisibleTask$(() => {
-    //     const sp = createBrowserClient(
-    //         import.meta.env.PUBLIC_SUPABASE_URL,
-    //         import.meta.env.PUBLIC_SUPABASE_ANON_KEY
-    //     );
-    //     sp.channel("group_message_channel")
-    //         .on(
-    //             "postgres_changes",
-    //             { event: "*", schema: "public", table: "group_messages" },
-    //             (event) => {
-    //                 console.log(event.new);
-    //                 messages.push(event.new);
-    //                 console.log(messages.value);
-    //             }
-    //         )
-    //         .subscribe();
-    // });
+    useVisibleTask$(() => {
+        const sp = createBrowserClient(
+            import.meta.env.PUBLIC_SUPABASE_URL,
+            import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+        );
+        sp.channel("group_message_channel")
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "group_messages" },
+                (event) => {
+                    const newMessage = event.new as MessageSubscription;
+                    if (Number(newMessage.group_id) === Number(data.value.id)) {
+                        messages.push(event.new);
+                    }
+                }
+            )
+            .subscribe();
+    });
     useTask$(({ track }) => {
         track(() => messages);
         messages.map((message: any) => {
