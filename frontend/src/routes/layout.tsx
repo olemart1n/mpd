@@ -12,12 +12,12 @@ import { Footer } from "~/components/footer";
 import { appContext, type App } from "~/context/appState";
 
 export default component$(() => {
-    const appState: App = useStore({ navIconLoading: false, user: null, dialogOpen: false });
+    const appState: App = useStore({ navIconLoading: false, profile: null, dialogOpen: false });
     useContextProvider(appContext, appState);
     const app = useContext(appContext);
     useVisibleTask$(() => {
-        if (localStorage.getItem("user") && !app.user) {
-            app.user = JSON.parse(localStorage.getItem("user") as string);
+        if (localStorage.getItem("profile") && !app.profile) {
+            app.profile = JSON.parse(localStorage.getItem("profile") as string);
         }
     });
     return (

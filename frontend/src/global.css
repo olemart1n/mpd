@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Mandali&display=swap");
 
 :root {
-    --dark: #4d4a4a;
+    --dark: #353434;
     --turk: #add3cf;
     --success: #aeecc4;
     --error: #f68f82;
@@ -10,11 +10,16 @@
     --green: #99c8ce;
     --green-light: #deeeef;
     --blue: #183c5c;
-    --blue-light: #2e72ac;
+    --blue-light: #6b96bb;
     --white-dimmed: #ecf0f1;
     --shadow-blue: rgba(117, 151, 165, 0.3);
     --shadow-black: rgba(47, 58, 62, 0.4);
     --shadow-white: rgba(218, 235, 241, 0.3);
+
+    --category-nature: rgba(165, 26, 240, 0.3);
+    --category-kultur: rgba(85, 168, 199, 0.3);
+    --category-trening: rgba(119, 242, 156, 0.3);
+    --category-mat-drikke: rgba(208, 237, 41, 0.3);
 
     --font-xsm: 0.4rem;
     --font-sm: 0.8rem;
@@ -28,6 +33,7 @@
     --media-lg: 1020px;
 }
 html {
+    background-color: var(--shadow-blue);
     -webkit-text-size-adjust: 100%;
     -moz-tab-size: 4;
     -o-tab-size: 4;
@@ -56,8 +62,8 @@ html {
     padding: 0;
 }
 body {
-    padding: 0;
-    margin: 0;
+    max-width: 1300px;
+    margin: auto;
     line-height: inherit;
     display: grid;
     height: 100dvh;
@@ -75,4 +81,26 @@ main {
 footer {
     color: var(--white);
     background-color: var(--blue);
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    box-shadow: var(--shadow-black) 2px 2px 11px 4px;
+    border-radius: 6px;
+}
+
+.natur {
+    background-color: var(--category-nature);
+}
+
+.kultur {
+    background-color: var(--category-kultur);
+}
+.trening {
+    background-color: var(--category-trening);
+}
+.mat-drikke {
+    background-color: var(--category-mat-drikke);
 }

@@ -61,13 +61,13 @@ export default component$(() => {
     });
     return (
         <Form preventdefault:submit action={action}>
-            <input type="text" name="author_id" id="author_id" hidden value={app.user?.id} />
+            <input type="text" name="author_id" id="author_id" hidden value={app.profile?.id} />
             <input
                 type="text"
                 name="author_username"
                 id="author_username"
                 hidden
-                value={app.user?.user_metadata.username}
+                value={app.profile?.username}
             />
             <div class="form-div">
                 <label for="title">Tittel</label>
@@ -117,12 +117,11 @@ export default component$(() => {
             <div class="category form-div">
                 <label for="category">Kategori</label>
                 <select name="category" id="category">
-                    <option value="egendefiner">Egendefiner</option>
                     <option value="natur">Natur</option>
                     <option value="kultur">Kultur</option>
-                    <option value="trene">Trene</option>
-                    <option value="spill">Spill</option>
-                    <option value="foreldre-med-barn">Foreldre med barn</option>
+                    <option value="trening">Trene</option>
+                    <option value="mat-drikke">Mat&drikke</option>
+                    <option value="annet">Annet</option>
                 </select>
             </div>
             <div class="textarea-div form-div">

@@ -8,9 +8,10 @@ import {
     useStore,
 } from "@builder.io/qwik";
 import styles from "./index.css?inline";
-// import { ButtonLogin } from "./ButtonLogin";
+import { HomeIcon } from "./HomeIcon";
 import { ButtonSignOut } from "./ButtonSignOut";
 import { NavIcon } from "./NavIcon";
+import { GroupLinks } from "./GroupLinks";
 import { appContext } from "~/context/appState";
 import { useNavigate, Link } from "@builder.io/qwik-city";
 import { LuUserSquare, LuLogIn, LuUserPlus2 } from "@qwikest/icons/lucide";
@@ -55,16 +56,16 @@ export const Nav = component$(() => {
             <Link
                 href="/"
                 style={{
-                    color: "var(--dark)",
+                    color: "#171616",
                     width: "fit-content",
                     display: "flex",
-                    alignItems: "center",
+                    alignItems: "self-end",
                 }}
             >
-                <h1 style={{ width: "fit-content" }}>MedPåDet</h1>
+                MedPåDet <HomeIcon />
             </Link>
             <section class={navIsToggled.value && "toggled"} ref={drag.menu}>
-                {app.user ? (
+                {app.profile ? (
                     <ul>
                         <li>
                             <button onClick$={() => navigate("/user")}>
@@ -78,11 +79,12 @@ export const Nav = component$(() => {
                                 Dine insjer
                             </button>
                         </li>
+                        <GroupLinks groups={app.profile.groups} isToggled={navIsToggled} />
 
                         <ButtonSignOut value={navIsToggled} />
                     </ul>
                 ) : (
-                    <ul>
+                    <ul style={{ height: "50%" }}>
                         <li>
                             <button onClick$={() => navigate("/auth/sign-in")}>
                                 <LuLogIn class="nav-icon" />

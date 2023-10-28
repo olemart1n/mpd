@@ -16,13 +16,14 @@ import {
     interestedClickErrorHandling,
     imDownClickErrorHandling,
 } from "~/utils/apiResponseHandling";
+import { LuUser2 } from "@qwikest/icons/lucide";
 
 //-----------ROUTELOADER
 export const useSpFetchInitiative = routeLoader$(async (reqEv) => {
     const { id } = reqEv.params;
     const sp = new SpServer(reqEv);
     const { data } = await sp.get_initiative(id);
-    // console.log(data);
+    console.log(data);
     return data;
 });
 // CANCEL INTEREST
@@ -74,15 +75,15 @@ export default component$(() => {
             uxResponse.status = options.setInterest.value?.status;
             uxResponse.status === "success" &&
                 data.interested.push({
-                    username: app.user?.user_metadata.username,
-                    age: app.user?.user_metadata.age,
-                    profile_id: app.user?.id,
+                    username: app.profile?.username,
+                    age: app.profile?.age,
+                    profile_id: app.profile?.id,
                 }) &&
                 (options.hasClickedMaybe = true);
         }
         if (options.cancelInterest.status) {
             const newArr = data.interested.filter(
-                ({ profile_id }: any) => profile_id !== app.user?.id
+                ({ profile_id }: any) => profile_id !== app.profile?.id
             );
             data.interested = newArr;
             options.hasClickedMaybe = false;
@@ -95,30 +96,31 @@ export default component$(() => {
     });
     useVisibleTask$(() => {
         const interestId = data.interested.find(
-            ({ profile_id }: any) => profile_id === app.user?.id
+            ({ profile_id }: any) => profile_id === app.profile?.id
         );
         interestId && (options.hasClickedMaybe = true);
     });
 
     const cancelInterest = $(() => {
-        options.cancelInterest.submit({ profile_id: app.user?.id });
+        options.cancelInterest.submit({ profile_id: app.profile?.id });
     });
     const setInterest = $(() => {
         options.setInterest.submit({
-            profile_id: app.user?.id,
-            gender: app.user?.user_metadata.gender,
-            username: app.user?.user_metadata.username,
-            age: app.user?.user_metadata.age,
+            profile_id: app.profile?.id,
+            gender: app.profile?.gender,
+            username: app.profile?.username,
+            age: app.profile?.age,
         });
     });
     const setImDown = $(() => {
         options.setImDown.submit({
-            profile_id: app.user?.id,
-            gender: app.user?.user_metadata.gender,
-            username: app.user?.user_metadata.username,
-            age: app.user?.user_metadata.age,
+            profile_id: app.profile?.id,
+            gender: app.profile?.gender,
+            username: app.profile?.username,
+            age: app.profile?.age,
             //avatar is inserted in the database
         });
+        app.profile?.groups && app.profile.groups.push({ title: data.title, id: data.groups?.id });
     });
     return (
         <>
@@ -129,12 +131,17 @@ export default component$(() => {
                     <i>vil ha med {data.allowed_attendees} personer</i>
                 </div>
                 <div class="author-div">
-                    <img
-                        src={data.author_id.avatar}
-                        width={100}
-                        height={100}
-                        alt="image of initiative author"
-                    />
+                    {data.author_id.avatar ? (
+                        <img
+                            src={data.author_id.avatar}
+                            width={100}
+                            height={100}
+                            alt="image of initiative author"
+                        />
+                    ) : (
+                        <LuUser2 />
+                    )}
+
                     <h2>{data.author_id.username}</h2>
                     <p>{data.author_id.age}</p>
                 </div>

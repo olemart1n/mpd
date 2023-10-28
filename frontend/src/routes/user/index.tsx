@@ -9,28 +9,29 @@ import { UiModal } from "~/components/ui/uiModal";
 import { UiButton, UiLoader2 } from "~/components/ui";
 import SpBrowser from "~/supabase/spBrowser";
 import imageCompression from "browser-image-compression";
-export const useSpFetchProfile = routeLoader$(async (reqEv) => {
+export const useProfile = routeLoader$(async (reqEv) => {
     const sp = new SpServer(reqEv);
     try {
         const { data: sessionData } = await sp.get_session();
-        const { user } = await sp.get_logged_in_user_profile(
+        const { data: user } = await sp.get_by_id(
             "profiles",
             sessionData.session?.user.id as string
         );
-        if (user) return { OK: true, user: user[0] };
+        if (user) return { OK: true, user: user };
     } catch (error) {
         return { OK: false, user: null };
     }
 });
 
 export default component$(() => {
-    const fetch = useSpFetchProfile();
+    const fetch = useProfile();
     const app = useContext(appContext);
     const fileInput = useSignal<HTMLInputElement>();
     const currentUpload = useSignal<string>();
     const isLoading = useSignal(false);
     useStylesScoped$(styles);
     useVisibleTask$(({ track }) => {
+        console.log("h3llo");
         track(() => currentUpload.value);
         if (currentUpload.value) {
             app.dialogOpen = true;
@@ -49,10 +50,11 @@ export default component$(() => {
             const sp = new SpBrowser();
             const { error, data } = await sp.send_file(
                 "avatars",
-                app.user?.id as string,
+                app.profile?.id as string,
                 compressedFile,
                 compressedFile.type
             );
+            console.log("logged from within the sendToSp function");
             console.log(error);
             console.log(data);
             if (!error) {

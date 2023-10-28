@@ -10,6 +10,7 @@ export const NavIcon = component$(({ value }: Signal) => {
         <button
             onClick$={() => {
                 value.value = !value.value;
+                app.navIconLoading = false;
             }}
         >
             <span class={app.navIconLoading ? "loading" : value.value ? "toggled" : ""}></span>

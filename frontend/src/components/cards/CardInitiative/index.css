@@ -1,25 +1,28 @@
-div {
-    width: 90%;
+.meta-container {
+    height: 4rem;
+}
+
+.meta {
     font-size: var(--font-md);
-    padding: 0.5rem;
     border-radius: 6px;
     box-shadow: var(--shadow-blue) 2px 2px 10px 5px;
     position: relative;
     margin: auto;
+    display: grid;
+    grid-template-columns: 15% 15% 45% 15% 10%;
+    max-height: 2rem;
+    place-content: center;
 }
-.meta {
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    background-color: transparent;
-}
-p.count {
-    font-size: var(--font-sm);
-    position: absolute;
-    height: 1rem;
-    width: 1rem;
+
+.avatar {
+    height: 60px;
+    width: 60px;
     border-radius: 50%;
-    right: 3px;
-    top: 3px;
+    background-color: var(--white-dimmed);
+}
+.title {
+    margin: auto 0.6rem;
+}
+.count {
+    font-size: var(--font-sm);
 }

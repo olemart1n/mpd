@@ -1,8 +1,8 @@
 import { createContextId } from "@builder.io/qwik";
-import { type User } from "supabase-auth-helpers-qwik";
+import { type ProfileInterface } from "~/utils";
 export interface App {
     navIconLoading: boolean;
-    user: User | null;
+    profile: ProfileInterface | null;
     dialogOpen: boolean;
 }
 

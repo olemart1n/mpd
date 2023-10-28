@@ -6,7 +6,7 @@ import { appContext } from "~/context/appState";
 import { useContext } from "@builder.io/qwik";
 import { UxServerResponse, type UiResponse } from "~/components/ux/uxServerResponse";
 import SpServerClass from "~/supabase/spServer";
-import { type User } from "supabase-auth-helpers-qwik";
+import { type ProfileInterface } from "~/utils";
 
 export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
     const { origin } = reqEv.url;
@@ -15,12 +15,12 @@ export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
     type MessageToClient = {
         message: string;
         status: string;
-        user: User | null; // Specify the User type for the 'user' property
+        profile: ProfileInterface | null;
     };
     const messageToClient: MessageToClient = {
         message: "",
         status: "error",
-        user: null,
+        profile: null,
     };
     const sp = new SpServerClass(reqEv);
     const { data, error } = await sp.sign_in({
@@ -36,7 +36,7 @@ export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
             null,
             null,
         ]);
-        cookie.set("supabase-auth-token", encodeURIComponent(cookieArray), {
+        cookie.set("supabase-auth-token", cookieArray, {
             httpOnly: true,
             maxAge: [1, "hours"],
             path: "/",
@@ -47,11 +47,21 @@ export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
 
     //-----------------------------------------
     const id = data.user?.id;
-    if (id) {
+    // const { data: profile } = await sp.get_by_id("profiles", id as string);
+    const { data: profile } = await sp.get_profile(id as string);
+
+    if (id && profile) {
+        const { imdown, ...rest } = profile;
+
+        const groups = imdown.map((x: any) => {
+            return { title: x?.initiatives?.title, id: x?.initiatives?.groups?.id };
+        });
+        const profileState = { ...rest, groups };
         messageToClient.message = "Du er innlogget";
         messageToClient.status = "success";
-        messageToClient.user = data.user;
+        messageToClient.profile = profileState;
     }
+
     error?.message ? (messageToClient.message = error.message.toString()) : "error";
     return messageToClient;
 });
@@ -75,9 +85,9 @@ export default component$(() => {
         statusMessage.message = action.value.message;
         statusMessage.status = action.value.status;
 
-        if (action.value.user) {
-            app.user = action.value.user;
-            localStorage.setItem("user", JSON.stringify(action.value.user));
+        if (action.value.profile) {
+            app.profile = action.value.profile;
+            localStorage.setItem("profile", JSON.stringify(action.value.profile));
             setTimeout(() => {
                 nav("/");
             }, 500);

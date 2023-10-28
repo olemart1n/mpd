@@ -1,0 +1,35 @@
+section {
+    display: grid;
+    grid-template-columns: 60% auto;
+    gap: 1rem;
+    padding: 0.2rem;
+    min-height: 40%;
+}
+
+.initiative-meta {
+    background-color: var(--blue-light);
+    border-radius: 6px;
+    color: var(--white-dimmed);
+}
+.user-meta {
+    display: grid;
+    grid-template-columns: 20% auto;
+    gap: 1rem;
+    font-size: var(--font-sm);
+    align-items: center;
+}
+.user-meta img {
+    border-radius: 50%;
+}
+.user-meta .img-icon {
+    height: 50px;
+    width: 50px;
+}
+h1 {
+    font-size: var(--font-md);
+    text-align: center;
+}
+
+.attendees img {
+    border-radius: 50%;
+}

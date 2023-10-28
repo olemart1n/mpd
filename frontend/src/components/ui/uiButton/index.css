@@ -1,5 +1,5 @@
 button {
-    font-size: var(--font-md);
+    font-size: var(--font-md-plus);
     border: 2px solid var(--green);
     padding: 0.3rem 1rem;
     border-radius: 0.2rem;

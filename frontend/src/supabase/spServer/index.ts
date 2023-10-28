@@ -35,10 +35,19 @@ class SpServer {
         return { user, error };
     }
 
-    async get_logged_in_user_profile(table: string, id: string) {
-        const { data: user, error } = await this.supabase.from(table).select("*").eq("id", id);
+    async get_by_id(table: string, id: string) {
+        const { data, error } = await this.supabase.from(table).select("*").eq("id", id).single();
         if (error) console.log(error);
-        return { user, error };
+        return { data, error };
+    }
+    async get_profile(id: string) {
+        const { data, error } = await this.supabase
+            .from("profiles")
+            .select("*, imdown(initiatives(title, groups(id)))")
+            .eq("id", id)
+            .single();
+        if (error) console.log(error);
+        return { data, error };
     }
 
     async post(table: string, postData: object) {
@@ -68,7 +77,7 @@ class SpServer {
         const { data, error } = await this.supabase
             .from("groups")
             .select(
-                "*, attendees: group_attendees(*, profile: profile_id(*)), messages: group_messages(*), initiative: initiative_id(*)"
+                "*, attendees: group_attendees(*, profile: profile_id(*)), messages: group_messages(*, author_id(*)), initiative: initiative_id(*, profiles(age))"
             )
             .eq("id", group_id)
             .single();
@@ -77,16 +86,10 @@ class SpServer {
         return { data, error };
     }
 
-    async get_by_id(table: string, id: string) {
-        const { data, error } = await this.supabase.from(table).select("*").eq("id", id);
-        if (error) console.log(error);
-        return { data, error };
-    }
-
     async get_initiative(postId: string) {
         const { data, error } = await this.supabase
             .from("initiatives")
-            .select(`*, author_id(*), interested: interested(*), imDown: imdown(*)`)
+            .select(`*, author_id(*), interested: interested(*), imDown: imdown(*), groups(*)`)
             .eq("id", postId)
             .single();
         if (error) console.log(error);
@@ -113,19 +116,6 @@ class SpServer {
             .eq("initiative_id", iId);
         if (error) console.log("error updating row :" + error);
         return { data, error };
-    }
-    channel_group_messages() {
-        this.supabase
-            .channel("group_message_channel")
-            .on(
-                "postgres_changes",
-                { event: "*", schema: "public", table: "group_messages" },
-                (event) => {
-                    console.log(event.new);
-                    return event;
-                }
-            )
-            .subscribe();
     }
     async check_for_deleted(id: string, iId: string) {
         const { data, error } = await this.supabase
