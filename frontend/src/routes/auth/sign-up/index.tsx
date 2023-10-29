@@ -6,7 +6,7 @@ import { appContext } from "~/context/appState";
 import { useContext } from "@builder.io/qwik";
 import { UxServerResponse, type UiResponse } from "~/components/ux/uxServerResponse";
 import { createServerClient } from "supabase-auth-helpers-qwik";
-
+import { UiButton } from "~/components";
 export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
     const { email, password, username, passwordControl, gender, age } = form;
     type MessageToClient = {
@@ -82,12 +82,25 @@ export default component$(() => {
             <section>
                 <div>
                     <label for="username">Brukernavn</label>
-                    <input type="text" name="username" id="username" autoComplete="name" />
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        autoComplete="name"
+                        placeholder="knut"
+                    />
                 </div>
 
                 <div>
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" required autoComplete="email" />
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        required
+                        autoComplete="email"
+                        placeholder="knut@knutsen.no"
+                    />
                 </div>
                 <div>
                     <label for="password">Passord</label>
@@ -98,6 +111,7 @@ export default component$(() => {
                         required
                         autoComplete="current-password"
                         minLength={6}
+                        placeholder="*******"
                     />
                 </div>
                 <div>
@@ -109,6 +123,7 @@ export default component$(() => {
                         required
                         autoComplete="current-password"
                         minLength={6}
+                        placeholder="*******"
                     />
                 </div>
 
@@ -135,15 +150,15 @@ export default component$(() => {
 
                 <UxServerResponse message={statusMessage.message} status={statusMessage.status} />
 
-                <button
-                    type="submit"
-                    onClick$={() => {
+                <UiButton
+                    class={"success"}
+                    click$={() => {
                         app.navIconLoading = true;
                     }}
                     disabled={app.navIconLoading && true}
                 >
                     Registrer
-                </button>
+                </UiButton>
             </section>
         </Form>
     );

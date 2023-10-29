@@ -6,6 +6,7 @@ interface uiBtn {
     // event?: { onClick$?: PropFunction<() => void> };
     click$: PropFunction<() => void>;
     class: string | null;
+    disabled?: boolean;
 }
 
 export const UiButton = component$<uiBtn>((props: uiBtn) => {

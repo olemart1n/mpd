@@ -7,6 +7,7 @@ import { useContext } from "@builder.io/qwik";
 import { UxServerResponse, type UiResponse } from "~/components/ux/uxServerResponse";
 import SpServerClass from "~/supabase/spServer";
 import { type ProfileInterface } from "~/utils";
+import { UiButton } from "~/components";
 
 export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
     const { origin } = reqEv.url;
@@ -103,11 +104,19 @@ export default component$(() => {
             <section>
                 <div>
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" required autoComplete="email" />
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        required
+                        autoComplete="email"
+                        placeholder="123@abc.no"
+                    />
                 </div>
                 <div>
                     <label for="password">Passord</label>
                     <input
+                        placeholder="pAAƨƨ0rd"
                         type="password"
                         name="password"
                         id="password"
@@ -118,15 +127,15 @@ export default component$(() => {
                 </div>
                 <UxServerResponse message={statusMessage.message} status={statusMessage.status} />
 
-                <button
-                    type="submit"
-                    onClick$={() => {
+                <UiButton
+                    class="success"
+                    click$={() => {
                         app.navIconLoading = true;
                     }}
                     disabled={app.navIconLoading && true}
                 >
                     Logg inn
-                </button>
+                </UiButton>
             </section>
             <div class="register-div">
                 <Link href="/auth/sign-up" style={{ color: "var(--dark" }}>

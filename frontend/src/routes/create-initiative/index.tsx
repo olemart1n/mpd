@@ -15,7 +15,6 @@ import { type UiResponse, UxServerResponse } from "~/components/ux/uxServerRespo
 export const useSpCreateInsj = routeAction$(async (form, reqEv) => {
     const sp = new SpServer(reqEv);
     const { data, error } = await sp.post("initiatives", form);
-
     return { data, error };
 });
 
@@ -62,6 +61,7 @@ export default component$(() => {
     return (
         <Form preventdefault:submit action={action}>
             <input type="text" name="author_id" id="author_id" hidden value={app.profile?.id} />
+            <input type="text" name="avatar" id="avatar" hidden value={app.profile?.avatar} />
             <input
                 type="text"
                 name="author_username"
