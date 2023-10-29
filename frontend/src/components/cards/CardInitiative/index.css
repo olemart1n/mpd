@@ -9,8 +9,8 @@
     position: relative;
     margin: auto;
     display: grid;
-    grid-template-columns: 15% 15% 45% 15% 10%;
-    max-height: 2rem;
+    grid-template-columns: 20% 15% 40% 15% 10%;
+    height: 3rem;
     place-content: center;
 }
 

@@ -8,10 +8,10 @@ export interface ProfileInterface {
     email: string | null;
     avatar: string | null;
     age: string | null;
-    groups?: Groups[] | null;
+    attended_groups: AttendedGroups[] | null;
 }
 
-interface Groups {
+interface AttendedGroups {
     title: string | null;
     id: string | null;
 }

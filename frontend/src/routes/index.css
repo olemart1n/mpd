@@ -1,7 +1,8 @@
 section {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 90%;
+    margin: auto;
     gap: 0.3rem;
 }
 

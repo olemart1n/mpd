@@ -91,6 +91,7 @@ export default component$(() => {
             uxResponse.message = options.setImDown.value?.message;
             uxResponse.status = options.setImDown.value?.status;
             uxResponse.status === "success" && (app.navIconLoading = true);
+            app.isNewProfileData = true;
         }
     });
     useVisibleTask$(() => {
@@ -119,7 +120,6 @@ export default component$(() => {
             age: app.profile?.age,
             //avatar is inserted in the database
         });
-        app.profile?.groups && app.profile.groups.push({ title: data.title, id: data.groups?.id });
     });
     return (
         <>

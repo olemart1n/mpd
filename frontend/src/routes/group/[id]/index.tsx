@@ -1,11 +1,11 @@
 import {
     component$,
-    useSignal,
     useStylesScoped$,
     useVisibleTask$,
     useStore,
     useTask$,
 } from "@builder.io/qwik";
+import { UiLoader } from "~/components";
 import { type DocumentHead, Form, routeLoader$, routeAction$ } from "@builder.io/qwik-city";
 import SpServer from "~/supabase/spServer";
 import { LuUserCircle, LuSend } from "@qwikest/icons/lucide";
@@ -34,9 +34,9 @@ export default component$(() => {
     const app = useContext(appContext);
     useStylesScoped$(styles);
     const data = useGetGroup();
-    const profiles = useSignal<[]>(data.value.attendees?.map((attendee: any) => attendee.profile));
     const avatarUrl = "https://oilmvgzqferfdqjvtsxz.supabase.co/storage/v1/object/public/avatars/";
-    const messages = useStore(data.value.messages);
+
+    const messages = useStore<MessageSubscription[]>([]);
     const routeAction = useSendChatMessage();
     useVisibleTask$(() => {
         const sp = createBrowserClient(
@@ -50,7 +50,7 @@ export default component$(() => {
                 (event) => {
                     const newMessage = event.new as MessageSubscription;
                     if (Number(newMessage.group_id) === Number(data.value.id)) {
-                        messages.push(event.new);
+                        messages.push(newMessage);
                     }
                 }
             )
@@ -68,7 +68,7 @@ export default component$(() => {
                 : (message.avatar = null);
         });
     });
-    return (
+    return data.value.messages ? (
         <div>
             <section>
                 <div class="initiative-meta">
@@ -97,7 +97,7 @@ export default component$(() => {
                     </div>
                 </div>
                 <div class="attendees">
-                    {profiles.value.map((attendee: any) =>
+                    {data.value.attendees?.map((attendee: any) =>
                         attendee.avatar ? (
                             <img
                                 src={attendee.avatar}
@@ -114,7 +114,7 @@ export default component$(() => {
             <div class="chat-container">
                 <div class="messages">
                     {" "}
-                    {messages.map((message: any) => (
+                    {data.value.messages.map((message: any) => (
                         <div key={message.id} class="message">
                             <div style={{ width: "5rem" }}>
                                 {" "}
@@ -156,6 +156,8 @@ export default component$(() => {
                 </Form>
             </div>
         </div>
+    ) : (
+        <UiLoader />
     );
 });
 

@@ -40,6 +40,14 @@ class SpServer {
         if (error) console.log(error);
         return { data, error };
     }
+    async get_joined_groups(id: string) {
+        const { data, error } = await this.supabase
+            .from("group_attendees")
+            .select("group_id, group_name: groups(name)")
+            .eq("profile_id", id);
+        if (error) console.log(error);
+        return { data, error };
+    }
     async get_profile(id: string) {
         const { data, error } = await this.supabase
             .from("profiles")

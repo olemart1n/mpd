@@ -11,10 +11,10 @@ import styles from "./index.css?inline";
 import { HomeIcon } from "./HomeIcon";
 import { ButtonSignOut } from "./ButtonSignOut";
 import { NavIcon } from "./NavIcon";
-import { GroupLinks } from "./GroupLinks";
 import { appContext } from "~/context/appState";
 import { useNavigate, Link } from "@builder.io/qwik-city";
 import { LuUserSquare, LuLogIn, LuUserPlus2 } from "@qwikest/icons/lucide";
+import { GroupLinks } from "./GroupLinks";
 export const Nav = component$(() => {
     const app = useContext(appContext);
     const nav = useNavigate();
@@ -79,7 +79,7 @@ export const Nav = component$(() => {
                                 Dine insjer
                             </button>
                         </li>
-                        <GroupLinks groups={app.profile.groups} isToggled={navIsToggled} />
+                        <GroupLinks groups={app.profile.attended_groups} isToggled={navIsToggled} />
 
                         <ButtonSignOut value={navIsToggled} />
                     </ul>

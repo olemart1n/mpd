@@ -13,11 +13,11 @@ export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
     const { origin } = reqEv.url;
     const { cookie } = reqEv;
     const { email, password } = form;
-    type MessageToClient = {
+    interface MessageToClient {
         message: string;
         status: string;
         profile: ProfileInterface | null;
-    };
+    }
     const messageToClient: MessageToClient = {
         message: "",
         status: "error",
@@ -46,18 +46,16 @@ export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
         });
     }
 
-    //-----------------------------------------
     const id = data.user?.id;
-    // const { data: profile } = await sp.get_by_id("profiles", id as string);
     const { data: profile } = await sp.get_profile(id as string);
 
     if (id && profile) {
         const { imdown, ...rest } = profile;
 
-        const groups = imdown.map((x: any) => {
+        const attended_groups = imdown.map((x: any) => {
             return { title: x?.initiatives?.title, id: x?.initiatives?.groups?.id };
         });
-        const profileState = { ...rest, groups };
+        const profileState = { ...rest, attended_groups };
         messageToClient.message = "Du er innlogget";
         messageToClient.status = "success";
         messageToClient.profile = profileState;

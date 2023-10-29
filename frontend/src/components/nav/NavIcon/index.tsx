@@ -5,7 +5,6 @@ import { useContext } from "@builder.io/qwik";
 export const NavIcon = component$(({ value }: Signal) => {
     const app = useContext(appContext);
     useStylesScoped$(styles);
-
     return (
         <button
             onClick$={() => {
