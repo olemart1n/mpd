@@ -14,7 +14,7 @@ import { NavIcon } from "./NavIcon";
 import { appContext } from "~/context/appState";
 import { useNavigate, Link } from "@builder.io/qwik-city";
 import { LuUserSquare, LuLogIn, LuUserPlus2 } from "@qwikest/icons/lucide";
-import { GroupLinks } from "./GroupLinks";
+import { GroupLinks } from "./groupLinks";
 export const Nav = component$(() => {
     const app = useContext(appContext);
     const nav = useNavigate();

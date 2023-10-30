@@ -4,5 +4,5 @@ export interface MessageSubscription {
     created_at: string;
     group_id: string | number;
     id: string | number;
-    avatar?: string;
+    avatar?: string | null;
 }

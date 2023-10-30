@@ -43,7 +43,7 @@ export default component$(() => {
     useStylesScoped$(styles);
     const data = useGetGroup();
     const messagesFetch = useGetGroupMessages();
-    const messagesStore = useStore({ value: messagesFetch.value });
+    const messagesStore = useStore({ value: messagesFetch.value, attendees: data.value.attendees });
     const avatarUrl = "https://oilmvgzqferfdqjvtsxz.supabase.co/storage/v1/object/public/avatars/";
     const chatInput = useSignal("");
     const chatMessagesDiv = useSignal<HTMLDivElement>();
@@ -59,10 +59,17 @@ export default component$(() => {
                 { event: "*", schema: "public", table: "group_messages" },
                 (event) => {
                     const newMessage = event.new as MessageSubscription;
-                    const profile = data.value.profiles.find(
-                        (attendee: any) => attendee.profile_id === newMessage.author_id
-                    );
-                    newMessage.avatar = profile.avatar;
+                    const profile =
+                        messagesStore.attendees &&
+                        messagesStore.attendees.find(
+                            (profile: any) => profile.profile_id === newMessage.author_id
+                        );
+                    if (profile) {
+                        newMessage.avatar = profile.profile.avatar;
+                    } else {
+                        newMessage.avatar = null;
+                    }
+
                     if (Number(newMessage.group_id) === Number(data.value.id)) {
                         messagesStore.value && messagesStore.value.push(newMessage);
                     }
@@ -148,7 +155,7 @@ export default component$(() => {
             <div class="chat-container">
                 <div class="messages" ref={chatMessagesDiv}>
                     {" "}
-                    {messagesStore.value?.map((message: any, i: any) => (
+                    {messagesStore.value.map((message: any, i: any) => (
                         <div key={i} class="message">
                             <div style={{ width: "5rem" }}>
                                 {" "}
@@ -166,7 +173,7 @@ export default component$(() => {
                             </div>
                             <div class="message-line">
                                 <p>{message.content}</p>
-                                <div class="created_at">{message.created_at.substring(14, 19)}</div>
+                                <div class="created_at">{message.created_at.substring(11, 16)}</div>
                             </div>
                         </div>
                     ))}
