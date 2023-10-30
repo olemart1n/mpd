@@ -92,6 +92,14 @@ class SpServer {
         if (error) console.log(error);
         return { data, error };
     }
+    async get_group_messages(group_id: string) {
+        const { data, error } = await this.supabase
+            .from("group_messages")
+            .select("*")
+            .eq("group_id", group_id);
+        if (error) console.log(error);
+        return { data, error };
+    }
 
     async get_initiative(postId: string) {
         const { data, error } = await this.supabase
@@ -121,15 +129,6 @@ class SpServer {
             .delete()
             .eq("profile_id", id)
             .eq("initiative_id", iId);
-        if (error) console.log("error updating row :" + error);
-        return { data, error };
-    }
-    async check_for_deleted(id: string, iId: string) {
-        const { data, error } = await this.supabase
-            .from("delete_log")
-            .select("*")
-            .eq("profile_id", id)
-            .eq("current_id", iId);
         if (error) console.log("error updating row :" + error);
         return { data, error };
     }

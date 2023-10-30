@@ -59,12 +59,19 @@ h1 {
     border-radius: 6px;
     border: 1px solid var(--turk);
     margin: auto;
+    position: relative;
 }
-
-.message p {
+.message-line p {
     width: 15rem;
     margin: 0.2rem;
     word-wrap: break-word;
+}
+.message-line .created_at {
+    position: absolute;
+    font-size: var(--font-sm);
+    margin: 0;
+    right: 0;
+    top: 0;
 }
 .chat-container button {
     display: block;

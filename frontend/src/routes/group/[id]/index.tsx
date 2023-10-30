@@ -1,12 +1,16 @@
 import {
     component$,
     useStylesScoped$,
-    useVisibleTask$,
+    // useVisibleTask$,
     useStore,
     useTask$,
+    $,
+    useSignal,
+    useVisibleTask$,
 } from "@builder.io/qwik";
+import type { RequestEvent } from "@builder.io/qwik-city";
 import { UiLoader } from "~/components";
-import { type DocumentHead, Form, routeLoader$, routeAction$ } from "@builder.io/qwik-city";
+import { type DocumentHead, routeLoader$, server$ } from "@builder.io/qwik-city";
 import SpServer from "~/supabase/spServer";
 import { LuUserCircle, LuSend } from "@qwikest/icons/lucide";
 import { useContext } from "@builder.io/qwik";
@@ -21,23 +25,29 @@ export const useGetGroup = routeLoader$(async (reqEv) => {
     const { data } = await sp.get_group(id as string);
     return data;
 });
-
-export const useSendChatMessage = routeAction$(async (form, reqEv) => {
+export const useGetGroupMessages = routeLoader$(async (reqEv) => {
     const { id } = reqEv.params;
-    const message = { group_id: id, ...form };
     const sp = new SpServer(reqEv);
-    const { data } = await sp.post("group_messages", message);
+    const { data } = await sp.get_group_messages(id as string);
     return data;
 });
 
+const sendMessage = server$(async function (form) {
+    const { id } = this.params;
+    const message = { group_id: id, ...form };
+    const sp = new SpServer(this as RequestEvent);
+    await sp.post("group_messages", message);
+});
 export default component$(() => {
     const app = useContext(appContext);
     useStylesScoped$(styles);
     const data = useGetGroup();
+    const messagesFetch = useGetGroupMessages();
+    const messagesStore = useStore({ value: messagesFetch.value });
     const avatarUrl = "https://oilmvgzqferfdqjvtsxz.supabase.co/storage/v1/object/public/avatars/";
-
-    const messages = useStore<MessageSubscription[]>([]);
-    const routeAction = useSendChatMessage();
+    const chatInput = useSignal("");
+    const chatMessagesDiv = useSignal<HTMLDivElement>();
+    const chatEnd = useSignal<HTMLDivElement>();
     useVisibleTask$(() => {
         const sp = createBrowserClient(
             import.meta.env.PUBLIC_SUPABASE_URL,
@@ -49,16 +59,27 @@ export default component$(() => {
                 { event: "*", schema: "public", table: "group_messages" },
                 (event) => {
                     const newMessage = event.new as MessageSubscription;
+                    const profile = data.value.profiles.find(
+                        (attendee: any) => attendee.profile_id === newMessage.author_id
+                    );
+                    newMessage.avatar = profile.avatar;
                     if (Number(newMessage.group_id) === Number(data.value.id)) {
-                        messages.push(newMessage);
+                        messagesStore.value && messagesStore.value.push(newMessage);
                     }
                 }
             )
             .subscribe();
     });
+
     useTask$(({ track }) => {
-        track(() => messages);
-        messages.map((message: any) => {
+        track(() => messagesFetch.value);
+        messagesStore.value = messagesFetch.value;
+    });
+
+    useTask$(({ track }) => {
+        track(() => messagesFetch.value);
+        if (!messagesStore.value) return;
+        messagesStore.value.map((message: any) => {
             const profile = data.value.attendees.find(
                 (attendee: any) => attendee.profile_id === message.author_id
             );
@@ -68,7 +89,20 @@ export default component$(() => {
                 : (message.avatar = null);
         });
     });
-    return data.value.messages ? (
+    useVisibleTask$(({ track }) => {
+        track(() => messagesStore.value?.length);
+        chatEnd.value?.scrollIntoView({ behavior: "smooth" });
+    });
+
+    const send = $(async () => {
+        const messageState = {
+            content: chatInput.value,
+            author_id: app.profile?.id,
+        };
+        chatInput.value = "";
+        await sendMessage(messageState);
+    });
+    return data.value.messages && messagesStore.value ? (
         <div>
             <section>
                 <div class="initiative-meta">
@@ -112,10 +146,10 @@ export default component$(() => {
                 </div>
             </section>
             <div class="chat-container">
-                <div class="messages">
+                <div class="messages" ref={chatMessagesDiv}>
                     {" "}
-                    {data.value.messages.map((message: any) => (
-                        <div key={message.id} class="message">
+                    {messagesStore.value?.map((message: any, i: any) => (
+                        <div key={i} class="message">
                             <div style={{ width: "5rem" }}>
                                 {" "}
                                 {message.avatar && message.avatar !== null ? (
@@ -132,28 +166,18 @@ export default component$(() => {
                             </div>
                             <div class="message-line">
                                 <p>{message.content}</p>
+                                <div class="created_at">{message.created_at.substring(14, 19)}</div>
                             </div>
                         </div>
                     ))}
+                    <div ref={chatEnd}></div>
                 </div>
-                <Form
-                    style={{ display: "flex", width: "100%", placeContent: "center" }}
-                    preventdefault:submit
-                    action={routeAction}
-                    spaReset
-                >
-                    <button>
+                <form style={{ display: "flex", width: "100%", placeContent: "center" }}>
+                    <button type="button" onClick$={send}>
                         <LuSend />
                     </button>
-                    <input
-                        type="text"
-                        hidden
-                        name="author_id"
-                        id="author_id"
-                        value={app.profile?.id}
-                    />
-                    <input type="text" name="content" id="content" />
-                </Form>
+                    <input type="text" name="content" id="content" bind:value={chatInput} />
+                </form>
             </div>
         </div>
     ) : (
