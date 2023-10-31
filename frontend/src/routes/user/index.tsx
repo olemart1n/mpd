@@ -52,6 +52,7 @@ export default component$(() => {
                 compressedFile.type
             );
             if (!error) {
+                app.isNewProfileData = true;
                 isLoading.value = false;
                 app.dialogOpen = false;
                 app.profile &&

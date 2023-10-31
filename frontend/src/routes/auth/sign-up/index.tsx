@@ -38,6 +38,8 @@ export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
             },
         },
     });
+    if (error) console.log("status " + error.status + " and " + error.message);
+
     const id = data.user?.id;
     if (id) {
         messageToClient.message = "Velkommen😀 Logg inn i neste steg";
@@ -65,9 +67,11 @@ export default component$(() => {
         app.navIconLoading = false;
         statusMessage.message = action.value.message;
         statusMessage.status = action.value.status;
-        setTimeout(() => {
-            nav("/auth/sign-in");
-        }, 1500);
+        if (action.value.status === "success") {
+            setTimeout(() => {
+                nav("/auth/sign-in");
+            }, 1500);
+        }
     });
     const ageArray = [];
     for (let i = 0; i < 100; i++) {

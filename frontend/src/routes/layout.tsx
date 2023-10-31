@@ -12,7 +12,7 @@ import { Footer } from "~/components/footer";
 import { appContext, type App } from "~/context/appState";
 import SpServer from "~/supabase/spServer";
 
-export const useSpGetProfile = routeAction$(async (form, reqEv) => {
+export const useDatabase = routeAction$(async (form, reqEv) => {
     const { id } = form;
     const sp = new SpServer(reqEv);
     const { data: profile } = await sp.get_profile(id as string);
@@ -34,7 +34,7 @@ export default component$(() => {
     });
     useContextProvider(appContext, appState);
     const app = useContext(appContext);
-    const action = useSpGetProfile();
+    const action = useDatabase();
     useVisibleTask$(({ track }) => {
         track(() => {
             app.isNewProfileData;

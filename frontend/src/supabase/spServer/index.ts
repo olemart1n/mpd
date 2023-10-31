@@ -4,6 +4,7 @@ import { type SignInWithPasswordCredentials } from "@supabase/supabase-js";
 
 class SpServer {
     supabase: SupabaseClient;
+
     constructor(reqEv: RequestEvent | RequestEventAction) {
         this.supabase = createServerClient(
             import.meta.env.PUBLIC_SUPABASE_URL,
@@ -24,16 +25,15 @@ class SpServer {
         return { error };
     }
 
-    async get_session() {
-        const data = await this.supabase.auth.getSession();
-        return data;
+    async refresh_session() {
+        await this.supabase.auth.refreshSession();
     }
 
-    async get_user() {
-        const { data: user, error } = await this.supabase.auth.getUser();
-        if (error) console.log(error);
-        return { user, error };
-    }
+    // async get_user() {
+    //     const { data: user, error } = await this.supabase.auth.getUser();
+    //     if (error) console.log(error);
+    //     return { user, error };
+    // }
 
     async get_by_id(table: string, id: string) {
         const { data, error } = await this.supabase.from(table).select("*").eq("id", id).single();
@@ -79,6 +79,7 @@ class SpServer {
             .eq("author_id", profile_id)
             .order("created_at", { ascending: false });
         if (error) console.log(error);
+
         return { data, error };
     }
     async get_group(group_id: string) {
