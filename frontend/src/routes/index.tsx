@@ -21,28 +21,27 @@ export const useSpFetch = routeLoader$(async (reqEv) => {
 
 export default component$(() => {
     useStylesScoped$(styles);
-    // const fetchSignal = useSpFetch();
+    const fetchSignal = useSpFetch();
     const app = useContext(appContext);
-    // const nav = useNavigate();
-    // const isCategoriesDisplayed = useSignal(false);
-    // const filteredCategory = useSignal("siste insjer");
-    // const initiatives = useSignal(fetchSignal.value.initiatives);
-    // useTask$(({ track }) => {
-    //     track(() => filteredCategory.value);
-    //     if (!fetchSignal.value.initiatives) return;
-    //     if (filteredCategory.value === "siste insjer") {
-    //         initiatives.value = fetchSignal.value.initiatives;
-    //     } else {
-    //         initiatives.value = fetchSignal.value.initiatives.filter(
-    //             (initiative) => initiative.category === filteredCategory.value
-    //         );
-    //     }
-    // });
+    const nav = useNavigate();
+    const isCategoriesDisplayed = useSignal(false);
+    const filteredCategory = useSignal("siste insjer");
+    const initiatives = useSignal(fetchSignal.value.initiatives);
+    useTask$(({ track }) => {
+        track(() => filteredCategory.value);
+        if (!fetchSignal.value.initiatives) return;
+        if (filteredCategory.value === "siste insjer") {
+            initiatives.value = fetchSignal.value.initiatives;
+        } else {
+            initiatives.value = fetchSignal.value.initiatives.filter(
+                (initiative) => initiative.category === filteredCategory.value
+            );
+        }
+    });
 
-    return app.profile ? (
-        // return fetchSignal.value.initiatives ? (
+    return fetchSignal.value.initiatives ? (
         <>
-            {/* <UiButton
+            <UiButton
                 click$={() => (app.profile ? nav("/create-initiative") : nav("/auth/sign-in"))}
                 class={!app.profile ? "error" : ""}
             >
@@ -63,8 +62,7 @@ export default component$(() => {
 
             <section>
                 {initiatives.value?.map((val: any) => <CardInitiative values={val} key={val.id} />)}
-            </section> */}
-            <p>hi</p>
+            </section>
         </>
     ) : (
         <div>

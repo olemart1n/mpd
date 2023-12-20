@@ -8,4 +8,9 @@ button {
     font-size: var(--font-md);
     color: var(--white);
     width: max-content;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--shadow-blue);
 }

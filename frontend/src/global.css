@@ -33,7 +33,7 @@
     --media-lg: 1020px;
 }
 html {
-    background-color: var(--shadow-blue);
+    background-color: var(--white-dimmed);
     -webkit-text-size-adjust: 100%;
     -moz-tab-size: 4;
     -o-tab-size: 4;
@@ -76,7 +76,7 @@ header {
 }
 main {
     color: var(--dark);
-    background-color: var(--white-dimmed);
+    /* background-color: var(--white-dimmed); */
 }
 footer {
     color: var(--white);

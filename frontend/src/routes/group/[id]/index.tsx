@@ -9,10 +9,10 @@ import {
     useVisibleTask$,
 } from "@builder.io/qwik";
 import type { RequestEvent } from "@builder.io/qwik-city";
-import { UiLoader } from "~/components";
+import { UiLoader, UiButton } from "~/components";
 import { type DocumentHead, routeLoader$, server$ } from "@builder.io/qwik-city";
 import SpServer from "~/supabase/spServer";
-import { LuUserCircle, LuSend } from "@qwikest/icons/lucide";
+import { LuUserCircle, LuSend, LuArrowLeftCircle } from "@qwikest/icons/lucide";
 import { useContext } from "@builder.io/qwik";
 import { appContext } from "~/context/appState";
 import styles from "./index.css?inline";
@@ -38,6 +38,7 @@ const sendMessage = server$(async function (form) {
     const sp = new SpServer(this as RequestEvent);
     await sp.post("group_messages", message);
 });
+
 export default component$(() => {
     const app = useContext(appContext);
     useStylesScoped$(styles);
@@ -46,13 +47,15 @@ export default component$(() => {
     const messagesStore = useStore({ value: messagesFetch.value, attendees: data.value.attendees });
     const avatarUrl = "https://oilmvgzqferfdqjvtsxz.supabase.co/storage/v1/object/public/avatars/";
     const chatInput = useSignal("");
-    const chatMessagesDiv = useSignal<HTMLDivElement>();
     const chatEnd = useSignal<HTMLDivElement>();
+    const isInfoClicked = useSignal(false);
+    // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
         const sp = createBrowserClient(
             import.meta.env.PUBLIC_SUPABASE_URL,
             import.meta.env.PUBLIC_SUPABASE_ANON_KEY
         );
+
         sp.channel("group_message_channel")
             .on(
                 "postgres_changes",
@@ -96,6 +99,7 @@ export default component$(() => {
                 : (message.avatar = null);
         });
     });
+    // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(({ track }) => {
         track(() => messagesStore.value?.length);
         chatEnd.value?.scrollIntoView({ behavior: "smooth" });
@@ -110,20 +114,10 @@ export default component$(() => {
         await sendMessage(messageState);
     });
     return data.value.messages && messagesStore.value ? (
-        <div>
-            <section>
+        <div class="page-wrapper">
+            <section class={isInfoClicked.value && "sm-screen-toggle"}>
                 <div class="initiative-meta">
-                    <div class="user-meta">
-                        {data.value.initiative.avatar ? (
-                            <img src={data.value.initiative.avatar} height={50} width={50} />
-                        ) : (
-                            <LuUserCircle class="img-icon" />
-                        )}
-                        <h2>
-                            {data.value.initiative.author_username},{" "}
-                            {data.value.initiative.profiles.age}
-                        </h2>
-                    </div>
+                    <div class="user-meta"></div>
                     <div>
                         <h1>{data.value.initiative.title}</h1>
                         <p>
@@ -137,23 +131,47 @@ export default component$(() => {
                         <div style={{ margin: "1rem auto" }}>{data.value.initiative.text}</div>
                     </div>
                 </div>
-                <div class="attendees">
-                    {data.value.attendees?.map((attendee: any) =>
-                        attendee.avatar ? (
-                            <img
-                                src={attendee.avatar}
-                                height={50}
-                                width={50}
-                                key={attendee.id}
-                            ></img>
-                        ) : (
-                            <LuUserCircle key={attendee.id} style={{ fontSize: "50px" }} />
-                        )
-                    )}
+                <div>
+                    <h3>Deltakere</h3>
+                    <div class="attendees">
+                        {" "}
+                        {data.value.attendees?.map((attendee: any, i: number) =>
+                            attendee ? (
+                                <div key={i} class="attendee">
+                                    <img
+                                        src={attendee.profile.avatar}
+                                        height={50}
+                                        width={50}
+                                        key={attendee.id}
+                                    ></img>
+                                    <p>{attendee.profile.username}</p>
+                                </div>
+                            ) : (
+                                <div key={i}>
+                                    <LuUserCircle key={attendee.id} style={{ fontSize: "50px" }} />
+                                </div>
+                            )
+                        )}
+                    </div>
                 </div>
             </section>
             <div class="chat-container">
-                <div class="messages" ref={chatMessagesDiv}>
+                <div class="small-device-container">
+                    <p>{data.value.initiative.title}</p>
+
+                    <UiButton
+                        click$={() => {
+                            if (isInfoClicked.value) {
+                                isInfoClicked.value = false;
+                            } else isInfoClicked.value = true;
+                            console.log(isInfoClicked.value);
+                        }}
+                        class={""}
+                    >
+                        <LuArrowLeftCircle />
+                    </UiButton>
+                </div>
+                <div class="messages">
                     {" "}
                     {messagesStore.value.map((message: any, i: any) => (
                         <div key={i} class="message">
@@ -179,11 +197,15 @@ export default component$(() => {
                     ))}
                     <div ref={chatEnd}></div>
                 </div>
-                <form style={{ display: "flex", width: "100%", placeContent: "center" }}>
+                <form>
+                    <input
+                        type="text"
+                        bind:value={chatInput}
+                        onKeyDown$={(e) => e.key === "Enter" && (e.preventDefault(), send())}
+                    />
                     <button type="button" onClick$={send}>
-                        <LuSend />
+                        <LuSend class="send-icon" />
                     </button>
-                    <input type="text" name="content" id="content" bind:value={chatInput} />
                 </form>
             </div>
         </div>

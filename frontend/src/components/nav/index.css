@@ -47,6 +47,7 @@ section ul li button {
     height: 100%;
     border-radius: 10px;
     font-size: var(--font-md);
+    cursor: pointer;
 }
 section ul li button .nav-icon {
     margin: 0 0.5rem;
