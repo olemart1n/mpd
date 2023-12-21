@@ -28,6 +28,9 @@ class SpServer {
     async refresh_session() {
         await this.supabase.auth.refreshSession();
     }
+    async get_session() {
+        return await this.supabase.auth.getSession();
+    }
 
     // async get_user() {
     //     const { data: user, error } = await this.supabase.auth.getUser();

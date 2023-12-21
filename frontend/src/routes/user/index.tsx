@@ -67,7 +67,6 @@ export default component$(() => {
 
     return (
         <div>
-            {" "}
             {app.profile ? (
                 <section>
                     <div class="image-div">
@@ -118,13 +117,14 @@ export default component$(() => {
                     </UiModal>
                     <input
                         type="file"
-                        id="myFile"
                         name="avatar"
                         accept="image/*"
                         ref={fileInput}
                         onChange$={(e) => {
-                            if (e.target.files && e.target.files.length > 0) {
-                                currentUpload.value = URL.createObjectURL(e.target.files[0]); // this handles client image url before upload
+                            if (!e.target) return;
+                            const target = e.target as HTMLInputElement;
+                            if (target.files && target.files.length > 0) {
+                                currentUpload.value = URL.createObjectURL(target.files[0]); // this handles client image url before upload
                             }
                         }}
                         hidden

@@ -1,24 +1,24 @@
-import { component$, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import styles from "./index.css?inline";
-import { routeLoader$ } from "@builder.io/qwik-city";
-import SpServer from "~/supabase/spServer";
-export const useGetInitiatives = routeLoader$(async (reqEv) => {
-    const sp = new SpServer(reqEv);
-    const { data: sessionData } = await sp.get_session();
-    const { data } = await sp.get_user_initiatives_desc(sessionData.session?.user.id as string);
-    return data;
-});
+// import { routeLoader$ } from "@builder.io/qwik-city";
+// import SpServer from "~/supabase/spServer";
+// export const useGetInitiatives = routeLoader$(async (reqEv) => {
+//     const sp = new SpServer(reqEv);
+//     const { data: sessionData } = await sp.get_session();
+//     const { data } = await sp.get_user_initiatives_desc(sessionData.session?.user.id as string);
+//     return data;
+// });
 
 export default component$(() => {
     useStylesScoped$(styles);
-    const data = useGetInitiatives();
-    useVisibleTask$(() => {
-        console.log(data.value);
-    });
+    // const data = useGetInitiatives();
+    // useVisibleTask$(() => {
+    //     console.log(data.value);
+    // });
     return (
         <div>
             <h1>Dine insjer</h1>
-            {data.value?.map((init: any) => (
+            {/* {data.value?.map((init: any) => (
                 <section key={init.id}>
                     <div>
                         {" "}
@@ -31,7 +31,7 @@ export default component$(() => {
                         <button>Kanseler insj</button>
                     </div>
                 </section>
-            ))}
+            ))} */}
         </div>
     );
 });

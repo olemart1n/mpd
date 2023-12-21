@@ -25,6 +25,7 @@ export const useSpFetchInitiative = routeLoader$(async (reqEv) => {
     const { data } = await sp.get_initiative(id);
     return data;
 });
+
 // CANCEL INTEREST
 export const useCancelInterest = routeAction$(async (form, reqEv) => {
     const { id } = reqEv.params;
@@ -33,6 +34,7 @@ export const useCancelInterest = routeAction$(async (form, reqEv) => {
     const { data } = await sp.cancel_interest(profile_id as string, id as string);
     return data;
 });
+
 // SET INTEREST
 export const useSetInterest = routeAction$(async (form, reqEv) => {
     const { id } = reqEv.params;
