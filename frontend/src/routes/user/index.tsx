@@ -1,16 +1,15 @@
 import { component$, useSignal, useStylesScoped$, useVisibleTask$, $ } from "@builder.io/qwik";
 import styles from "./index.css?inline";
 import { useContext } from "@builder.io/qwik";
-import { appContext } from "~/context/appState";
+import { appContext } from "~/context";
 import { LuUserSquare, LuPenSquare } from "@qwikest/icons/lucide";
 import { routeLoader$ } from "@builder.io/qwik-city";
-import SpServer from "~/supabase/spServer";
-import { UiModal } from "~/components/ui/uiModal";
+import { UiModal } from "~/components";
 import { UiButton, UiLoader2 } from "~/components/ui";
-import SpBrowser from "~/supabase/spBrowser";
 import imageCompression from "browser-image-compression";
+import BrowserClient from "~/supabase/browserClient";
 export const useProfile = routeLoader$(async (reqEv) => {
-    const sp = new SpServer(reqEv);
+    const sp = reqEv.sharedMap.get("serverClient");
     try {
         const { data: sessionData } = await sp.get_session();
         const { data: user } = await sp.get_by_id(
@@ -29,6 +28,7 @@ export default component$(() => {
     const currentUpload = useSignal<string>();
     const isLoading = useSignal(false);
     useStylesScoped$(styles);
+    // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(({ track }) => {
         track(() => currentUpload.value);
         if (currentUpload.value) {
@@ -44,7 +44,7 @@ export default component$(() => {
                 maxWidthOrHeight: 780,
                 useWebWorker: true,
             });
-            const sp = new SpBrowser();
+            const sp = new BrowserClient();
             const { error } = await sp.send_file(
                 "avatars",
                 app.profile?.id as string,

@@ -8,18 +8,14 @@
     --error: #f68f82;
     --white: rgb(255, 255, 255);
     --green: #99c8ce;
-    --green-light: #deeeef;
-    --blue: #183c5c;
     --blue-light: #6b96bb;
-    --white-dimmed: #ecf0f1;
-    --shadow-blue: rgba(117, 151, 165, 0.3);
-    --shadow-black: rgba(47, 58, 62, 0.4);
-    --shadow-white: rgba(218, 235, 241, 0.3);
-
-    --category-nature: rgba(165, 26, 240, 0.3);
-    --category-kultur: rgba(85, 168, 199, 0.3);
-    --category-trening: rgba(119, 242, 156, 0.3);
-    --category-mat-drikke: rgba(208, 237, 41, 0.3);
+    --shadow-1: rgba(117, 151, 165, 0.3);
+    --shadow-2: rgba(47, 58, 62, 0.4);
+    --shadow-3: rgba(218, 235, 241, 0.3);
+    --nature: rgba(165, 26, 240, 0.3);
+    --culture: rgba(85, 168, 199, 0.3);
+    --gym: rgba(119, 242, 156, 0.3);
+    --food: rgba(208, 237, 41, 0.3);
 
     --font-xsm: 0.4rem;
     --font-sm: 0.8rem;
@@ -27,10 +23,6 @@
     --font-md-plus: 1.5rem;
     --font-lg: 1.8rem;
     --font-xlg: 3rem;
-
-    --media-sm: 480px;
-    --media-md: 760px;
-    --media-lg: 1020px;
 }
 html {
     background-color: var(--white-dimmed);
@@ -76,7 +68,6 @@ header {
 }
 main {
     color: var(--dark);
-    /* background-color: var(--white-dimmed); */
 }
 footer {
     color: var(--white);
@@ -87,20 +78,20 @@ footer {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    box-shadow: var(--shadow-black) 2px 2px 11px 4px;
+    box-shadow: var(--shadow-1) 2px 2px 11px 4px;
     border-radius: 6px;
 }
 
 .natur {
-    background-color: var(--category-nature);
+    background-color: var(--nature);
 }
 
 .kultur {
-    background-color: var(--category-kultur);
+    background-color: var(--culture);
 }
 .trening {
-    background-color: var(--category-trening);
+    background-color: var(--gym);
 }
 .mat-drikke {
-    background-color: var(--category-mat-drikke);
+    background-color: var(--food);
 }

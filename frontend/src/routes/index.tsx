@@ -9,13 +9,15 @@ import {
 } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead, useNavigate } from "@builder.io/qwik-city";
 import styles from "./index.css?inline";
-import SpServer from "~/supabase/spServer";
-import { appContext } from "~/context/appState";
+import { appContext } from "~/context";
 import { UiButton, UiLoader, CardInitiative } from "~/components";
 import { LuFilter } from "@qwikest/icons/lucide";
 export const useSpFetch = routeLoader$(async (reqEv) => {
-    const sp = new SpServer(reqEv);
-    const { data: initiatives } = await sp.get_initiatives_desc();
+    const sp = reqEv.sharedMap.get("serverClient");
+    const { data: initiatives } = await sp
+        .from("initiatives")
+        .select("*")
+        .order("created_at", { ascending: false });
     return { initiatives };
 });
 
@@ -34,7 +36,7 @@ export default component$(() => {
             initiatives.value = fetchSignal.value.initiatives;
         } else {
             initiatives.value = fetchSignal.value.initiatives.filter(
-                (initiative) => initiative.category === filteredCategory.value
+                (initiative: any) => initiative.category === filteredCategory.value
             );
         }
     });

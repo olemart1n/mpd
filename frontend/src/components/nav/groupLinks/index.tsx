@@ -1,7 +1,10 @@
 import { type Signal, component$, useStylesScoped$ } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city";
 import styles from "./index.css?inline";
-import { type AttendedGroups } from "~/utils";
+export interface AttendedGroups {
+    title: string | null;
+    id: string | null;
+}
 
 interface Values {
     groups: AttendedGroups[] | null | undefined;

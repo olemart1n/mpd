@@ -8,21 +8,21 @@ import {
 } from "@builder.io/qwik";
 import { routeAction$, routeLoader$ } from "@builder.io/qwik-city";
 import { useContext } from "@builder.io/qwik";
-import { appContext } from "~/context/appState";
-import SpServer from "~/supabase/spServer";
+import { appContext } from "~/context";
 import styles from "./index.css?inline";
 import { UserCardLight, UserCard, UiButton, UxServerResponse, type UiResponse } from "~/components";
-import {
-    interestedClickErrorHandling,
-    imDownClickErrorHandling,
-} from "~/utils/apiResponseHandling";
+import { type PostgrestError } from "@supabase/supabase-js";
 import { LuUser2 } from "@qwikest/icons/lucide";
 
 //-----------ROUTELOADER
 export const useSpFetchInitiative = routeLoader$(async (reqEv) => {
     const { id } = reqEv.params;
-    const sp = new SpServer(reqEv);
-    const { data } = await sp.get_initiative(id);
+    const sp = reqEv.sharedMap.get("serverClient");
+    const { data } = await sp
+        .from("initiatives")
+        .select(`*, author_id(*), interested: interested(*), imDown: imdown(*), groups(*)`)
+        .eq("id", id)
+        .single();
     return data;
 });
 
@@ -30,24 +30,34 @@ export const useSpFetchInitiative = routeLoader$(async (reqEv) => {
 export const useCancelInterest = routeAction$(async (form, reqEv) => {
     const { id } = reqEv.params;
     const { profile_id } = form;
-    const sp = new SpServer(reqEv);
-    const { data } = await sp.cancel_interest(profile_id as string, id as string);
+    const sp = reqEv.sharedMap.get("serverClient");
+    const { data } = await sp
+        .from("interested")
+        .delete()
+        .eq("profile_id", profile_id)
+        .eq("initiative_id", id);
     return data;
 });
 
 // SET INTEREST
 export const useSetInterest = routeAction$(async (form, reqEv) => {
     const { id } = reqEv.params;
-    const sp = new SpServer(reqEv);
-    const { error } = await sp.set_interest({ ...form, initiative_id: id });
+    const sp = reqEv.sharedMap.get("serverClient");
+    const { error } = await sp
+        .from("interested")
+        .insert({ ...form, initiative_id: id })
+        .select();
     const { message, status } = interestedClickErrorHandling(error);
     return { message, status };
 });
 
 export const useSetImDown = routeAction$(async (form, reqEv) => {
     const { id } = reqEv.params;
-    const sp = new SpServer(reqEv);
-    const { error } = await sp.set_imDown({ ...form, initiative_id: id });
+    const sp = reqEv.sharedMap.get("serverClient");
+    const { error } = await sp
+        .from("imdown")
+        .insert({ ...form, initiative_id: id })
+        .select();
     const { message, status } = imDownClickErrorHandling(error);
     return { message, status };
 });
@@ -96,6 +106,7 @@ export default component$(() => {
             app.isNewProfileData = true;
         }
     });
+    // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
         const interestId = data.interested.find(
             ({ profile_id }: any) => profile_id === app.profile?.id
@@ -181,3 +192,42 @@ export default component$(() => {
         </>
     );
 });
+
+const imDownClickErrorHandling = (
+    error: PostgrestError | null
+): { message: string; status: string } => {
+    const apiResponse = { message: "", status: "" };
+    if (!error) {
+        apiResponse.message = "Du er med!";
+        apiResponse.status = "success";
+    } else if (error.code === "23505") {
+        apiResponse.message = "Du kan ikke bli mer enn en gang";
+        apiResponse.status = "error";
+    } else if (error.code === "42501") {
+        apiResponse.message = "Du må logge inn.";
+        apiResponse.status = "error";
+    } else {
+        apiResponse.message = error.message;
+        apiResponse.status = "error";
+    }
+    return apiResponse;
+};
+const interestedClickErrorHandling = (
+    error: PostgrestError | null
+): { message: string; status: string } => {
+    const apiResponse = { message: "", status: "" };
+    if (!error) {
+        apiResponse.message = "Kanskje!";
+        apiResponse.status = "success";
+    } else if (error.code === "23505") {
+        apiResponse.message = "Du har allerede vist interesse";
+        apiResponse.status = "error";
+    } else if (error.code === "42501") {
+        apiResponse.message = "Du må logge inn.";
+        apiResponse.status = "error";
+    } else {
+        apiResponse.message = error.message;
+        apiResponse.status = "error";
+    }
+    return apiResponse;
+};

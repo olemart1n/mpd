@@ -2,12 +2,27 @@ import { type DocumentHead } from "@builder.io/qwik-city";
 import { component$, useStylesScoped$, useStore, useVisibleTask$ } from "@builder.io/qwik";
 import { Form, routeAction$, Link, useNavigate } from "@builder.io/qwik-city";
 import styles from "../index.css?inline";
-import { appContext } from "~/context/appState";
+import { appContext } from "~/context";
 import { useContext } from "@builder.io/qwik";
-import { UxServerResponse, type UiResponse } from "~/components/ux/uxServerResponse";
-import SpServerClass from "~/supabase/spServer";
-import { type ProfileInterface } from "~/utils";
+import { UxServerResponse, type UiResponse } from "~/components/";
 import { UiButton } from "~/components";
+export interface ProfileInterface {
+    id: string | null;
+    updated_at: string | null;
+    username: string | null;
+    first_name: string | null;
+    last_name: string | null;
+    gender: string | null;
+    email: string | null;
+    avatar: string | null;
+    age: string | null;
+    attended_groups: AttendedGroups[] | null;
+}
+
+interface AttendedGroups {
+    title: string | null;
+    id: string | null;
+}
 
 export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
     const { origin } = reqEv.url;
@@ -23,8 +38,8 @@ export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
         status: "error",
         profile: null,
     };
-    const sp = new SpServerClass(reqEv);
-    const { data, error } = await sp.sign_in({
+    const sp = reqEv.sharedMap.get("serverClient");
+    const { data, error } = await sp.auth.signInWithPassword({
         email: email.toString(),
         password: password.toString(),
     });
@@ -47,7 +62,11 @@ export const useSupabaseLogin = routeAction$(async (form, reqEv) => {
     }
 
     const id = data.user?.id;
-    const { data: profile } = await sp.get_profile(id as string);
+    const { data: profile } = await sp
+        .from("profiles")
+        .select("*, imdown(initiatives(title, groups(id)))")
+        .eq("id", id)
+        .single();
 
     if (id && profile) {
         const { imdown, ...rest } = profile;
@@ -76,7 +95,7 @@ export default component$(() => {
         message: undefined,
         status: undefined,
     });
-
+    // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(({ track }) => {
         track(() => action.value);
         if (!action.value) return;

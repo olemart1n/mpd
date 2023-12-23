@@ -1,6 +1,6 @@
 import { Slot, component$, useStylesScoped$ } from "@builder.io/qwik";
 import { useContext } from "@builder.io/qwik";
-import { appContext } from "~/context/appState";
+import { appContext } from "~/context";
 import styles from "./index.css?inline";
 export const UiModal = component$(() => {
     useStylesScoped$(styles);

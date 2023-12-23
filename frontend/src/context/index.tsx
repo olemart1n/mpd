@@ -1,3 +1,4 @@
+import { createContextId } from "@builder.io/qwik";
 export interface ProfileInterface {
     id: string | null;
     updated_at: string | null;
@@ -15,3 +16,11 @@ interface AttendedGroups {
     title: string | null;
     id: string | null;
 }
+export interface App {
+    navIconLoading: boolean;
+    profile: ProfileInterface | null;
+    dialogOpen: boolean;
+    isNewProfileData: boolean;
+}
+
+export const appContext = createContextId<App>("appState");

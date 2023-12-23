@@ -2,10 +2,9 @@ import { type DocumentHead } from "@builder.io/qwik-city";
 import { component$, useStylesScoped$, useStore, useVisibleTask$ } from "@builder.io/qwik";
 import { Form, routeAction$, useNavigate } from "@builder.io/qwik-city";
 import styles from "../index.css?inline";
-import { appContext } from "~/context/appState";
+import { appContext } from "~/context";
 import { useContext } from "@builder.io/qwik";
-import { UxServerResponse, type UiResponse } from "~/components/ux/uxServerResponse";
-import { createServerClient } from "supabase-auth-helpers-qwik";
+import { UxServerResponse, type UiResponse } from "~/components/";
 import { UiButton } from "~/components";
 export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
     const { email, password, username, passwordControl, gender, age } = form;
@@ -22,11 +21,7 @@ export const useSupabaseSignUp = routeAction$(async (form, reqEv) => {
         messageToClient.status = "error";
         return messageToClient;
     }
-    const sp = createServerClient(
-        import.meta.env.PUBLIC_SUPABASE_URL,
-        import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
-        reqEv
-    );
+    const sp = reqEv.sharedMap.get("serverClient");
     const { data, error } = await sp.auth.signUp({
         email: email.toString(),
         password: password.toString(),
@@ -60,7 +55,7 @@ export default component$(() => {
         message: undefined,
         status: undefined,
     });
-
+    // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(({ track }) => {
         track(() => action.value);
         if (!action.value) return;

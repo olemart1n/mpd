@@ -73,9 +73,9 @@ This starter site is configured to deploy to [Netlify Edge Functions](https://do
 The [Netlify CLI](https://docs.netlify.com/cli/get-started/) can be used to preview a production build locally. To do so: First build your site, then to start a local server, run:
 
 1. Install Netlify CLI globally `npm i -g netlify-cli`.
-2. Build your site with both ssr and static `npm run build`.
-3. Start a local server with `npm run serve`.
-   In this project, `npm run serve` uses the `netlify dev` command to spin up a server that can handle Netlify's Edge Functions locally.
+2. Build your site with both ssr and static `bun build`.
+3. Start a local server with `bun serve`.
+   In this project, `bun serve` uses the `netlify dev` command to spin up a server that can handle Netlify's Edge Functions locally.
 4. Visit [http://localhost:8888/](http://localhost:8888/) to check out your site.
 
 ### Edge Functions Declarations

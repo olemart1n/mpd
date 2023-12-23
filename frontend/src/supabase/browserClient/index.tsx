@@ -1,5 +1,5 @@
 import { createBrowserClient, type SupabaseClient } from "supabase-auth-helpers-qwik";
-class SpBrowser {
+class BrowserClient {
     supabase: SupabaseClient;
     constructor() {
         this.supabase = createBrowserClient(
@@ -22,4 +22,4 @@ class SpBrowser {
     }
 }
 
-export default SpBrowser;
+export default BrowserClient;

@@ -11,32 +11,45 @@ import {
 import type { RequestEvent } from "@builder.io/qwik-city";
 import { UiLoader, UiButton } from "~/components";
 import { type DocumentHead, routeLoader$, server$ } from "@builder.io/qwik-city";
-import SpServer from "~/supabase/spServer";
 import { LuUserCircle, LuSend, LuArrowLeftCircle } from "@qwikest/icons/lucide";
 import { useContext } from "@builder.io/qwik";
-import { appContext } from "~/context/appState";
+import { appContext } from "~/context";
 import styles from "./index.css?inline";
-import type { MessageSubscription } from "~/utils";
-
 import { createBrowserClient } from "supabase-auth-helpers-qwik";
+import { createSupabaseServerClient } from "~/supabase";
+export interface MessageSubscription {
+    author_id: string;
+    content: string;
+    created_at: string;
+    group_id: string | number;
+    id: string | number;
+    avatar?: string | null;
+}
 export const useGetGroup = routeLoader$(async (reqEv) => {
     const { id } = reqEv.params;
-    const sp = new SpServer(reqEv);
-    const { data } = await sp.get_group(id as string);
+    const sp = reqEv.sharedMap.get("serverClient");
+    const { data } = await sp
+        .from("groups")
+        .select(
+            "*, attendees: group_attendees(*, profile: profile_id(*)), messages: group_messages(*), initiative: initiative_id(*, profiles(age))"
+        )
+        .eq("id", id)
+        .single();
     return data;
 });
 export const useGetGroupMessages = routeLoader$(async (reqEv) => {
     const { id } = reqEv.params;
-    const sp = new SpServer(reqEv);
-    const { data } = await sp.get_group_messages(id as string);
+    const sp = reqEv.sharedMap.get("serverClient");
+    const { data } = await sp.from("group_messages").select("*").eq("group_id", id);
     return data;
 });
 
 const sendMessage = server$(async function (form) {
     const { id } = this.params;
     const message = { group_id: id, ...form };
-    const sp = new SpServer(this as RequestEvent);
-    await sp.post("group_messages", message);
+    console.log(message);
+    const sp = createSupabaseServerClient(this as RequestEvent);
+    await sp.from("group_messages").insert([message]);
 });
 
 export default component$(() => {
@@ -74,7 +87,7 @@ export default component$(() => {
                     }
 
                     if (Number(newMessage.group_id) === Number(data.value.id)) {
-                        messagesStore.value && messagesStore.value.push(newMessage);
+                        messagesStore.value.push(newMessage);
                     }
                 }
             )
@@ -88,7 +101,6 @@ export default component$(() => {
 
     useTask$(({ track }) => {
         track(() => messagesFetch.value);
-        if (!messagesStore.value) return;
         messagesStore.value.map((message: any) => {
             const profile = data.value.attendees.find(
                 (attendee: any) => attendee.profile_id === message.author_id
@@ -101,7 +113,7 @@ export default component$(() => {
     });
     // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(({ track }) => {
-        track(() => messagesStore.value?.length);
+        track(() => messagesStore.value.length);
         chatEnd.value?.scrollIntoView({ behavior: "smooth" });
     });
 
@@ -113,7 +125,7 @@ export default component$(() => {
         chatInput.value = "";
         await sendMessage(messageState);
     });
-    return data.value.messages && messagesStore.value ? (
+    return data.value.messages ? (
         <div class="page-wrapper">
             <section class={isInfoClicked.value && "sm-screen-toggle"}>
                 <div class="initiative-meta">

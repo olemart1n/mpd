@@ -1,6 +1,6 @@
 import { type Signal, component$, useStylesScoped$ } from "@builder.io/qwik";
 import styles from "./index.css?inline";
-import { appContext } from "~/context/appState";
+import { appContext } from "~/context";
 import { useContext } from "@builder.io/qwik";
 export const NavIcon = component$(({ value }: Signal) => {
     const app = useContext(appContext);

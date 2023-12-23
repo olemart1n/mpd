@@ -8,16 +8,30 @@ import {
 } from "@builder.io/qwik";
 import { routeAction$, type RequestHandler } from "@builder.io/qwik-city";
 import { Nav } from "~/components/nav";
-import { Footer } from "~/components/footer";
-import { appContext, type App } from "~/context/appState";
-import SpServer from "~/supabase/spServer";
+import { Footer } from "~/components";
+import { appContext, type App } from "~/context";
+import { createServerClient } from "supabase-auth-helpers-qwik";
+
+export const onRequest: RequestHandler = async (reqEv) => {
+    reqEv.sharedMap.set(
+        "serverClient",
+        createServerClient(
+            import.meta.env.PUBLIC_SUPABASE_URL,
+            import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
+            reqEv
+        )
+    );
+};
 
 export const useDatabase = routeAction$(async (form, reqEv) => {
     const { id } = form;
-    const sp = new SpServer(reqEv);
-    const { data: profile } = await sp.get_profile(id as string);
-    const { imdown, ...rest } = profile;
-
+    const spServer = reqEv.sharedMap.get("serverClient");
+    const { data } = await spServer
+        .from("profiles")
+        .select("*, imdown(initiatives(title, groups(id)))")
+        .eq("id", id)
+        .single();
+    const { imdown, ...rest } = data;
     const attended_groups = imdown.map((x: any) => {
         return { title: x?.initiatives?.title, id: x?.initiatives?.groups?.id };
     });
@@ -35,6 +49,7 @@ export default component$(() => {
     useContextProvider(appContext, appState);
     const app = useContext(appContext);
     const action = useDatabase();
+    // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(({ track }) => {
         track(() => {
             app.isNewProfileData;

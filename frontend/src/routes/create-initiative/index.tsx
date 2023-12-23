@@ -8,13 +8,12 @@ import {
 } from "@builder.io/qwik";
 import { Form, routeAction$, useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import styles from "./index.css?inline";
-import SpServer from "~/supabase/spServer";
 import { useContext } from "@builder.io/qwik";
-import { appContext } from "~/context/appState";
+import { appContext } from "~/context";
 import { type UiResponse, UxServerResponse } from "~/components/ux/uxServerResponse";
 export const useSpCreateInsj = routeAction$(async (form, reqEv) => {
-    const sp = new SpServer(reqEv);
-    const { data, error } = await sp.post("initiatives", form);
+    const sp = reqEv.sharedMap.get("serverClient");
+    const { data, error } = await sp.from("initiatives").insert(form);
     return { data, error };
 });
 
@@ -43,6 +42,7 @@ export default component$(() => {
         };
     });
     const statusMessage = useStore<UiResponse>({ message: undefined, status: undefined });
+    // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(({ track }) => {
         track(() => action.value);
         if (!action.status) return;

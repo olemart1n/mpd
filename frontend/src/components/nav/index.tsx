@@ -8,10 +8,10 @@ import {
     useStore,
 } from "@builder.io/qwik";
 import styles from "./index.css?inline";
-import { HomeIcon } from "./HomeIcon";
-import { ButtonSignOut } from "./ButtonSignOut";
-import { NavIcon } from "./NavIcon";
-import { appContext } from "~/context/appState";
+import { HomeIcon } from "./homeIcon";
+import { ButtonSignOut } from "./buttonSignOut";
+import { NavIcon } from "./navIcon";
+import { appContext } from "~/context";
 import { useNavigate, Link } from "@builder.io/qwik-city";
 import { LuUserSquare, LuLogIn, LuUserPlus2 } from "@qwikest/icons/lucide";
 import { GroupLinks } from "./groupLinks";
@@ -29,6 +29,7 @@ export const Nav = component$(() => {
         nav(destination);
         navIsToggled.value = false;
     });
+    // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
         window.addEventListener("touchstart", (e) => {
             if (navIsToggled.value === false) return;
