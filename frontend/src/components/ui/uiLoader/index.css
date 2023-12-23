@@ -1,0 +1,48 @@
+span {
+    position: absolute;
+    width: 100px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+span:before,
+span:after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 32px 0 var(--green);
+    left: 0;
+    top: 0;
+    animation: ballMoveX 1s linear infinite;
+}
+span:after {
+    box-shadow: none;
+    transform-origin: 40px 0;
+    transform: rotate(-153deg);
+    animation: rotateLoader 1s linear infinite;
+}
+
+@keyframes rotateLoader {
+    0%,
+    10% {
+        transform: rotate(-153deg);
+    }
+    90%,
+    100% {
+        transform: rotate(0deg);
+    }
+}
+@keyframes ballMoveX {
+    0%,
+    10% {
+        transform: translateX(0);
+    }
+    90%,
+    100% {
+        transform: translateX(32px);
+    }
+}

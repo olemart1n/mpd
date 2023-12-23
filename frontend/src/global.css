@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Mandali&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Mandali&display=swap");
+
+:root {
+    --dark: #353434;
+    --turk: #add3cf;
+    --success: #aeecc4;
+    --error: #f68f82;
+    --white: rgb(255, 255, 255);
+    --green: #99c8ce;
+    --blue-light: #6b96bb;
+    --shadow-1: rgba(117, 151, 165, 0.3);
+    --shadow-2: rgba(47, 58, 62, 0.4);
+    --shadow-3: rgba(218, 235, 241, 0.3);
+    --nature: rgba(165, 26, 240, 0.3);
+    --culture: rgba(85, 168, 199, 0.3);
+    --gym: rgba(119, 242, 156, 0.3);
+    --food: rgba(208, 237, 41, 0.3);
+
+    --font-xsm: 0.4rem;
+    --font-sm: 0.8rem;
+    --font-md: 1.1rem;
+    --font-md-plus: 1.5rem;
+    --font-lg: 1.8rem;
+    --font-xlg: 3rem;
+}
+html {
+    background-color: var(--white-dimmed);
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    font-family:
+        "Inter",
+        Roboto,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Helvetica Neue",
+        Arial,
+        "Noto Sans",
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji";
+}
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+}
+body {
+    max-width: 1300px;
+    margin: auto;
+    line-height: inherit;
+    display: grid;
+    height: 100dvh;
+    grid-template-rows: auto 1fr auto;
+}
+
+header {
+    background-color: var(--green);
+    color: var(--dark);
+}
+main {
+    color: var(--dark);
+}
+footer {
+    color: var(--white);
+    background-color: var(--blue);
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    box-shadow: var(--shadow-1) 2px 2px 11px 4px;
+    border-radius: 6px;
+}
+
+.natur {
+    background-color: var(--nature);
+}
+
+.kultur {
+    background-color: var(--culture);
+}
+.trening {
+    background-color: var(--gym);
+}
+.mat-drikke {
+    background-color: var(--food);
+}
