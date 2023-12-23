@@ -18,7 +18,11 @@ import { LuUser2 } from "@qwikest/icons/lucide";
 export const useSpFetchInitiative = routeLoader$(async (reqEv) => {
     const { id } = reqEv.params;
     const sp = reqEv.sharedMap.get("serverClient");
-    const { data } = await sp.get_initiative(id);
+    const { data } = await sp
+        .from("initiatives")
+        .select(`*, author_id(*), interested: interested(*), imDown: imdown(*), groups(*)`)
+        .eq("id", id)
+        .single();
     return data;
 });
 
@@ -50,7 +54,10 @@ export const useSetInterest = routeAction$(async (form, reqEv) => {
 export const useSetImDown = routeAction$(async (form, reqEv) => {
     const { id } = reqEv.params;
     const sp = reqEv.sharedMap.get("serverClient");
-    const { error } = await sp.set_imDown({ ...form, initiative_id: id });
+    const { error } = await sp
+        .from("imdown")
+        .insert({ ...form, initiative_id: id })
+        .select();
     const { message, status } = imDownClickErrorHandling(error);
     return { message, status };
 });

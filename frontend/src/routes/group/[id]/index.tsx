@@ -16,6 +16,7 @@ import { useContext } from "@builder.io/qwik";
 import { appContext } from "~/context";
 import styles from "./index.css?inline";
 import { createBrowserClient } from "supabase-auth-helpers-qwik";
+import { createSupabaseServerClient } from "~/supabase";
 export interface MessageSubscription {
     author_id: string;
     content: string;
@@ -28,8 +29,10 @@ export const useGetGroup = routeLoader$(async (reqEv) => {
     const { id } = reqEv.params;
     const sp = reqEv.sharedMap.get("serverClient");
     const { data } = await sp
-        .from("profiles")
-        .select("*, imdown(initiatives(title, groups(id)))")
+        .from("groups")
+        .select(
+            "*, attendees: group_attendees(*, profile: profile_id(*)), messages: group_messages(*), initiative: initiative_id(*, profiles(age))"
+        )
         .eq("id", id)
         .single();
     return data;
@@ -44,8 +47,9 @@ export const useGetGroupMessages = routeLoader$(async (reqEv) => {
 const sendMessage = server$(async function (form) {
     const { id } = this.params;
     const message = { group_id: id, ...form };
-    const sp = (this as RequestEvent).sharedMap.get("serverClient");
-    await sp.from("group_messages").insert(message);
+    console.log(message);
+    const sp = createSupabaseServerClient(this as RequestEvent);
+    await sp.from("group_messages").insert([message]);
 });
 
 export default component$(() => {
